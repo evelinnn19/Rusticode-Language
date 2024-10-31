@@ -1,11 +1,5 @@
 start:
-int :: var001;
-int :: var002;
+int x = 2;
+print(x);
 
-var001 << 10;
-    	if (var001 == 10) {
-       		var002 << 1;
-   		} endif;
 end
-
-

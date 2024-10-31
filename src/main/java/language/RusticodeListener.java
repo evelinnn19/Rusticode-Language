@@ -8,135 +8,45 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface RusticodeListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#programa}.
+	 * Enter a parse tree produced by {@link RusticodeParser#program}.
 	 * @param ctx the parse tree
 	 */
-	void enterPrograma(RusticodeParser.ProgramaContext ctx);
+	void enterProgram(RusticodeParser.ProgramContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#programa}.
+	 * Exit a parse tree produced by {@link RusticodeParser#program}.
 	 * @param ctx the parse tree
 	 */
-	void exitPrograma(RusticodeParser.ProgramaContext ctx);
+	void exitProgram(RusticodeParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#sentencia}.
+	 * Enter a parse tree produced by {@link RusticodeParser#sentence}.
 	 * @param ctx the parse tree
 	 */
-	void enterSentencia(RusticodeParser.SentenciaContext ctx);
+	void enterSentence(RusticodeParser.SentenceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#sentencia}.
+	 * Exit a parse tree produced by {@link RusticodeParser#sentence}.
 	 * @param ctx the parse tree
 	 */
-	void exitSentencia(RusticodeParser.SentenciaContext ctx);
+	void exitSentence(RusticodeParser.SentenceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#definicion}.
+	 * Enter a parse tree produced by {@link RusticodeParser#varDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterDefinicion(RusticodeParser.DefinicionContext ctx);
+	void enterVarDeclaration(RusticodeParser.VarDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#definicion}.
+	 * Exit a parse tree produced by {@link RusticodeParser#varDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitDefinicion(RusticodeParser.DefinicionContext ctx);
+	void exitVarDeclaration(RusticodeParser.VarDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#const_type}.
+	 * Enter a parse tree produced by {@link RusticodeParser#assignmentStmt}.
 	 * @param ctx the parse tree
 	 */
-	void enterConst_type(RusticodeParser.Const_typeContext ctx);
+	void enterAssignmentStmt(RusticodeParser.AssignmentStmtContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#const_type}.
+	 * Exit a parse tree produced by {@link RusticodeParser#assignmentStmt}.
 	 * @param ctx the parse tree
 	 */
-	void exitConst_type(RusticodeParser.Const_typeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#asignacion}.
-	 * @param ctx the parse tree
-	 */
-	void enterAsignacion(RusticodeParser.AsignacionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#asignacion}.
-	 * @param ctx the parse tree
-	 */
-	void exitAsignacion(RusticodeParser.AsignacionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#exp_mat}.
-	 * @param ctx the parse tree
-	 */
-	void enterExp_mat(RusticodeParser.Exp_matContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#exp_mat}.
-	 * @param ctx the parse tree
-	 */
-	void exitExp_mat(RusticodeParser.Exp_matContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#termino}.
-	 * @param ctx the parse tree
-	 */
-	void enterTermino(RusticodeParser.TerminoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#termino}.
-	 * @param ctx the parse tree
-	 */
-	void exitTermino(RusticodeParser.TerminoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#factor}.
-	 * @param ctx the parse tree
-	 */
-	void enterFactor(RusticodeParser.FactorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#factor}.
-	 * @param ctx the parse tree
-	 */
-	void exitFactor(RusticodeParser.FactorContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#bool}.
-	 * @param ctx the parse tree
-	 */
-	void enterBool(RusticodeParser.BoolContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#bool}.
-	 * @param ctx the parse tree
-	 */
-	void exitBool(RusticodeParser.BoolContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#exp_log}.
-	 * @param ctx the parse tree
-	 */
-	void enterExp_log(RusticodeParser.Exp_logContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#exp_log}.
-	 * @param ctx the parse tree
-	 */
-	void exitExp_log(RusticodeParser.Exp_logContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#comparador}.
-	 * @param ctx the parse tree
-	 */
-	void enterComparador(RusticodeParser.ComparadorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#comparador}.
-	 * @param ctx the parse tree
-	 */
-	void exitComparador(RusticodeParser.ComparadorContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#if_sentence}.
-	 * @param ctx the parse tree
-	 */
-	void enterIf_sentence(RusticodeParser.If_sentenceContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#if_sentence}.
-	 * @param ctx the parse tree
-	 */
-	void exitIf_sentence(RusticodeParser.If_sentenceContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#while_sentence}.
-	 * @param ctx the parse tree
-	 */
-	void enterWhile_sentence(RusticodeParser.While_sentenceContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#while_sentence}.
-	 * @param ctx the parse tree
-	 */
-	void exitWhile_sentence(RusticodeParser.While_sentenceContext ctx);
+	void exitAssignmentStmt(RusticodeParser.AssignmentStmtContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RusticodeParser#type}.
 	 * @param ctx the parse tree
@@ -148,13 +58,93 @@ public interface RusticodeListener extends ParseTreeListener {
 	 */
 	void exitType(RusticodeParser.TypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RusticodeParser#literal_value}.
+	 * Enter a parse tree produced by {@link RusticodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterLiteral_value(RusticodeParser.Literal_valueContext ctx);
+	void enterExpression(RusticodeParser.ExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RusticodeParser#literal_value}.
+	 * Exit a parse tree produced by {@link RusticodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitLiteral_value(RusticodeParser.Literal_valueContext ctx);
+	void exitExpression(RusticodeParser.ExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RusticodeParser#logicalExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterLogicalExpr(RusticodeParser.LogicalExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RusticodeParser#logicalExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitLogicalExpr(RusticodeParser.LogicalExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RusticodeParser#comparisonExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterComparisonExpr(RusticodeParser.ComparisonExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RusticodeParser#comparisonExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitComparisonExpr(RusticodeParser.ComparisonExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RusticodeParser#arithmeticExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterArithmeticExpr(RusticodeParser.ArithmeticExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RusticodeParser#arithmeticExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitArithmeticExpr(RusticodeParser.ArithmeticExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RusticodeParser#term}.
+	 * @param ctx the parse tree
+	 */
+	void enterTerm(RusticodeParser.TermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RusticodeParser#term}.
+	 * @param ctx the parse tree
+	 */
+	void exitTerm(RusticodeParser.TermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RusticodeParser#factor}.
+	 * @param ctx the parse tree
+	 */
+	void enterFactor(RusticodeParser.FactorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RusticodeParser#factor}.
+	 * @param ctx the parse tree
+	 */
+	void exitFactor(RusticodeParser.FactorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RusticodeParser#ifStmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfStmt(RusticodeParser.IfStmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RusticodeParser#ifStmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfStmt(RusticodeParser.IfStmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RusticodeParser#whileStmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhileStmt(RusticodeParser.WhileStmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RusticodeParser#whileStmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhileStmt(RusticodeParser.WhileStmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RusticodeParser#printStmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintStmt(RusticodeParser.PrintStmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RusticodeParser#printStmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintStmt(RusticodeParser.PrintStmtContext ctx);
 }

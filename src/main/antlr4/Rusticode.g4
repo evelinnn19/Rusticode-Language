@@ -1,146 +1,181 @@
 grammar Rusticode;
 
-/**
-    ------------------------------------------
-           Analizador Sintáctico
-    ------------------------------------------
-*/
+@parser::header {
+    import java.util.HashMap;
+    import java.util.ArrayList;
+    import ast.*;
+}
 
-
-programa: START sentencia+ END;
-
-sentencia: (definicion | asignacion | if_sentence | while_sentence) SEMICOLON;
-
-
-//definicion: type DDPOINT VAR (ASSIG literal_value)?
-   //        | const_type DDPOINT VAR ('[' NUM ']')?;
-
-definicion
-    : type DDPOINT VAR            // Definición de variables sin valor inicial
-    | type DDPOINT VAR ('[' NUM ']')?
-    | const_type DDPOINT VAR    // Definición de constantes sin asignación
-    ;
-
-const_type
-    : '?int'
-    | '?real'
-    | '?char'
-    ;
-
-asignacion
-    : VAR ASSIG (literal_value | exp_mat)    // Asignación a una variable simple
-    | VAR '[' NUM ']' ASSIG (literal_value | exp_mat)  // Asignación a una posición en un arreglo
-    ;
-
-exp_mat: termino (SUM termino | REST termino)*;
-
-termino: factor (MULT factor | REST factor | DIV factor)*;
-
-factor: OPENBRACKET exp_mat CLOSEDBRACKET
-      | NUM
-      | VAR;
-
-
-bool
-    : TRUE
-    | FALSE
-    | exp_log;
-
-
-exp_log
-    : exp_log AND exp_log
-    | exp_log OR exp_log
-    | exp_log comparador exp_log
-    | (VAR | NUM) comparador (VAR | NUM)
-    | NEGT OPENBRACKET exp_log CLOSEDBRACKET
-    | OPENBRACKET exp_log CLOSEDBRACKET
-    ;
-
-comparador
-    : HIGH
-    | LESS
-    | HEQL
-    | LEQL
-    | EQUAL
-    | UNEQL
-    ;
-
-
-if_sentence: IF OPENBRACKET exp_log CLOSEDBRACKET OPENKEY sentencia+ CLOSEKEY ENDIF;
-
-while_sentence: WHILE OPENBRACKET exp_log CLOSEDBRACKET OPENKEY sentencia+ CLOSEKEY ENDWHILE;
-
-type: DEFINT | DEFREAL | DEFCHAR;
-
-literal_value: NUM | CHAR | bool;
-
+@parser::members {
+    private HashMap<String, Object> symbolTable = new HashMap<>();
+}
 
 /**
-    ------------------------------------------
-           Analizador Léxico Gramatico
-    ------------------------------------------
-*/
+ * Parser Rules
+ */
+
+program returns [ASTNode node]
+    @init {
+        List<ASTNode> body = new ArrayList<>(); // Lista de instrucciones
+    }
+    : (sentence{
+        if ($sentence.node != null) {
+            body.add($sentence.node);
+        } else {
+            System.err.println("Error: sentence es null");
+        }
+    })+
+    {
+        $node = new Program(body); // Crear el nodo Program
+
+    }
+    EOF
+;
+
+sentence returns [ASTNode node]
+    : varDeclaration SEMICOLON { $node = $varDeclaration.node; }
+    | assignmentStmt SEMICOLON { $node = $assignmentStmt.node; }
+    | expression SEMICOLON { $node = $expression.node; }
+    | ifStmt { $node = $ifStmt.node; }
+    | whileStmt { $node = $whileStmt.node; }
+    | printStmt SEMICOLON { $node = $printStmt.node; }
+    ;
 
 
-// Palabras reservadas
-START: 'start:';
-END: 'end';
-DEFINT: 'int';
-DEFREAL: 'real';
-DEFCHAR: 'char';
-IF: 'if';
-ENDIF: 'endif';
-WHILE: 'while';
-ENDWHILE: 'endwhile';
-TRUE: 'True';
-FALSE: 'False';
+varDeclaration returns [ASTNode node]
+    : type ID (ASSIGN expr=expression)?
+        {
+            $node = ($expr.ctx != null)
+                ? new VariableDeclaration($type.text, $ID.text, $expr.node)
+                : new VariableDeclaration($type.text, $ID.text, null);
+        }
+    ;
 
-// Operadores matemáticos
-SUM: '+';
-REST: '-';
-MULT: '*';
-DIV: '/';
+assignmentStmt returns [ASTNode node]
+    : ID ASSIGN expr=expression
+        { $node = new Assignment($ID.text, $expr.node); }
+    ;
 
-// Operadores de comparación
-HIGH: '>';
-LESS: '<';
-HEQL: '>=';
-LEQL: '<=';
-UNEQL: '!=';
-AND: '&&';
-OR: '||';
-EQUAL: '==';
-NEGT: '¬';
+type
+    : INT
+    | FLOAT
+    | STRING
+    ;
 
-// Asignación
-ASSIG: '<<';
+expression returns [ASTNode node]
+    : logicalExpr { $node = $logicalExpr.node; }
+    ;
 
-// Puntos
-DOUPOINT: ':';
-DDPOINT: '::';
+logicalExpr returns [ASTNode node]
+    : left=comparisonExpr (op=(AND | OR) right=comparisonExpr
+        { $node = new LogicalExpression($op.text, $left.node, $right.node); })*
+    | comparisonExpr { $node = $comparisonExpr.node; }
+    ;
+
+comparisonExpr returns [ASTNode node]
+    : left=arithmeticExpr (op=(GT | LT | GTE | LTE | EQ | NEQ) right=arithmeticExpr
+        { $node = new ComparativeExpression($op.text, $left.node, $right.node); })*
+    | arithmeticExpr { $node = $arithmeticExpr.node; }
+    ;
+
+arithmeticExpr returns [ASTNode node]
+    : left=term (op=(PLUS | MINUS) right=term
+        { $node = new ArithmeticExpression($op.text, $left.node, $right.node); })*
+    | term { $node = $term.node; }
+    ;
+
+term returns [ASTNode node]
+    : left=factor (op=(MULT | DIV) right=factor
+        { $node = new ArithmeticExpression($op.text, $left.node, $right.node); })*
+    | factor { $node = $factor.node; }
+    ;
+
+factor returns [ASTNode node]
+    : LPAREN expr=expression RPAREN { $node = $expr.node; }
+    | NUMBER { $node = new NumberLiteral($NUMBER.text); }
+    | STRING_LITERAL { $node = new StringLiteral($STRING_LITERAL.text); }
+    | BOOL_LITERAL { $node = new BooleanLiteral($BOOL_LITERAL.text); }
+    | ID { $node = new Variable($ID.text); }
+    ;
+
+ifStmt returns [ASTNode node]
+@init {
+    ArrayList<ASTNode> thenBlock = new ArrayList<>();
+    ArrayList<ASTNode> elseBlock = new ArrayList<>();
+}
+    : IF LPAREN cond=expression RPAREN LBRACE
+        (thenStmt=sentence { thenBlock.add($thenStmt.node); })*
+      RBRACE
+      (ELSE LBRACE
+        (elseStmt=sentence { elseBlock.add($elseStmt.node); })*
+      RBRACE)?
+      { $node = new If($cond.node, thenBlock, elseBlock); }
+    ;
+
+whileStmt returns [ASTNode node]
+@init {
+    ArrayList<ASTNode> bodyBlock = new ArrayList<>();
+}
+    : WHILE LPAREN cond=expression RPAREN LBRACE
+        (bodyStmt=sentence { bodyBlock.add($bodyStmt.node); })*
+      RBRACE
+      { $node = new While($cond.node, bodyBlock); }
+    ;
+
+printStmt returns [ASTNode node]
+    : PRINT LPAREN expression RPAREN
+      { $node = new Print($expression.node); }
+    ;
+
+/**
+ * Lexer Rules
+ */
+
+// Keywords
+IF      : 'if';
+ELSE    : 'else';
+WHILE   : 'while';
+PRINT   : 'print';
+START   : 'start:';
+END     : 'end';
+
+// Types
+INT     : 'int';
+FLOAT   : 'float';
+STRING  : 'string';
+
+// Operators
+PLUS    : '+';
+MINUS   : '-';
+MULT    : '*';
+DIV     : '/';
+ASSIGN  : '=';
+
+// Comparison Operators
+GT      : '>';
+LT      : '<';
+GTE     : '>=';
+LTE     : '<=';
+EQ      : '==';
+NEQ     : '!=';
+
+// Logical Operators
+AND     : '&&';
+OR      : '||';
+
+// Delimiters
+LPAREN  : '(';
+RPAREN  : ')';
+LBRACE  : '{';
+RBRACE  : '}';
 SEMICOLON: ';';
 
-// Paréntesis
-OPENBRACKET: '(';
-CLOSEDBRACKET: ')';
+// Literals
+NUMBER  : '-'? [0-9]+ ('.' [0-9]+)?;
+STRING_LITERAL : '"' (~["\r\n])* '"';
+BOOL_LITERAL  : 'true' | 'false';
+ID      : [a-zA-Z_][a-zA-Z0-9_]*;
 
-// Llaves
-OPENKEY: '{';
-CLOSEKEY: '}';
-
-// Números
-NUM: '-'? [0-9]+ ('.' [0-9]+)?;
-
-// Caracteres (variables)
-CHAR: '\'' [a-zA-Z_] '\'';
-
-// Variable
-VAR: 'var' [0-9] [0-9] [0-9];
-
-// Espacios en blanco
-SW: [ \t\r\n]+ -> skip;
-
-// Comentarios
-COM: '\'' . '\'' | '"' . '"';
-
-
+// Whitespace and comments
+WS      : [ \t\r\n]+ -> skip;
+COMMENT : '//' ~[\r\n]* -> skip;

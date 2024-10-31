@@ -11,83 +11,29 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface RusticodeVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#programa}.
+	 * Visit a parse tree produced by {@link RusticodeParser#program}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrograma(RusticodeParser.ProgramaContext ctx);
+	T visitProgram(RusticodeParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#sentencia}.
+	 * Visit a parse tree produced by {@link RusticodeParser#sentence}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSentencia(RusticodeParser.SentenciaContext ctx);
+	T visitSentence(RusticodeParser.SentenceContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#definicion}.
+	 * Visit a parse tree produced by {@link RusticodeParser#varDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDefinicion(RusticodeParser.DefinicionContext ctx);
+	T visitVarDeclaration(RusticodeParser.VarDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#const_type}.
+	 * Visit a parse tree produced by {@link RusticodeParser#assignmentStmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitConst_type(RusticodeParser.Const_typeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#asignacion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAsignacion(RusticodeParser.AsignacionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#exp_mat}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExp_mat(RusticodeParser.Exp_matContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#termino}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTermino(RusticodeParser.TerminoContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#factor}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFactor(RusticodeParser.FactorContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#bool}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBool(RusticodeParser.BoolContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#exp_log}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExp_log(RusticodeParser.Exp_logContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#comparador}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitComparador(RusticodeParser.ComparadorContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#if_sentence}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIf_sentence(RusticodeParser.If_sentenceContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#while_sentence}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitWhile_sentence(RusticodeParser.While_sentenceContext ctx);
+	T visitAssignmentStmt(RusticodeParser.AssignmentStmtContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RusticodeParser#type}.
 	 * @param ctx the parse tree
@@ -95,9 +41,57 @@ public interface RusticodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitType(RusticodeParser.TypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#literal_value}.
+	 * Visit a parse tree produced by {@link RusticodeParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLiteral_value(RusticodeParser.Literal_valueContext ctx);
+	T visitExpression(RusticodeParser.ExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RusticodeParser#logicalExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLogicalExpr(RusticodeParser.LogicalExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RusticodeParser#comparisonExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComparisonExpr(RusticodeParser.ComparisonExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RusticodeParser#arithmeticExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArithmeticExpr(RusticodeParser.ArithmeticExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RusticodeParser#term}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTerm(RusticodeParser.TermContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RusticodeParser#factor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFactor(RusticodeParser.FactorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RusticodeParser#ifStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfStmt(RusticodeParser.IfStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RusticodeParser#whileStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhileStmt(RusticodeParser.WhileStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RusticodeParser#printStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrintStmt(RusticodeParser.PrintStmtContext ctx);
 }
