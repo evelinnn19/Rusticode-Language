@@ -14,7 +14,13 @@ public class While implements ASTNode {
         this.whilebody = whilebody;
     }
 
+    public ASTNode getCondition() {
+        return condition;
+    }
 
+    public ArrayList<ASTNode> getWhilebody() {
+        return whilebody;
+    }
 
     @Override
     public Object execute(HashMap<String, Object> Table) {

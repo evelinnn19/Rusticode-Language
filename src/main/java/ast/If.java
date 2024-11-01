@@ -17,6 +17,18 @@ public class If implements ASTNode{
         this.elsebody = elsebody;
     }
 
+    public ASTNode getCondition() {
+        return condition;
+    }
+
+    public ArrayList<ASTNode> getElsebody() {
+        return elsebody;
+    }
+
+    public ArrayList<ASTNode> getIfbody() {
+        return ifbody;
+    }
+
     @Override
     public Object execute(HashMap<String, Object> Table) {
         if (condition.execute(Table) == Boolean.TRUE) {

@@ -17,6 +17,7 @@ public class Constant implements ASTNode{
         this.value = value;
     }
 
+
     @Override
     public Object execute(HashMap<String, Object> Table) {
         if (Table.containsKey(String.valueOf(value))) {

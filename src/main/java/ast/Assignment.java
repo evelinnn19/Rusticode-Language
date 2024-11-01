@@ -12,6 +12,13 @@ public class Assignment implements ASTNode {
         this.expression = expression;
     }
 
+    public ASTNode getExpression() {
+        return expression;
+    }
+
+    public String getId() {
+        return id;
+    }
 
     @Override
     public Object execute(HashMap<String, Object> Table) {

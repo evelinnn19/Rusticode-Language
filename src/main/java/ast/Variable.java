@@ -11,6 +11,10 @@ public class Variable implements ASTNode{
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public Object execute(HashMap<String, Object> Table) {
         Object o = Table.get(name);

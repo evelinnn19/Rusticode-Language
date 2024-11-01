@@ -15,6 +15,17 @@ public class LogicalExpression implements ASTNode{
         this.op = op;
     }
 
+    public ASTNode getOp1() {
+        return op1;
+    }
+
+    public ASTNode getOp2() {
+        return op2;
+    }
+
+    public String getOp() {
+        return op;
+    }
 
     @Override
     public Object execute(HashMap<String, Object> Table) {

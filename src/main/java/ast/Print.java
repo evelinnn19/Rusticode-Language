@@ -10,11 +10,15 @@ public class Print implements ASTNode {
         this.data = data;
     }
 
+    public ASTNode getData() {
+        return data;
+    }
+
     @Override
     public Object execute(HashMap<String, Object> Table) {
         String msg = String.valueOf(data.execute(Table));
         msg = msg.replaceAll("\"", "");
-       GUIRusticode.getInstance().appendOutput(msg);
+       GUIRusticode.getInstance().appendOutput(msg + "\n");
         return null;
     }
 }

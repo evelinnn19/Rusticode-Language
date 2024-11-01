@@ -15,6 +15,17 @@ public class ComparativeExpression implements ASTNode {
         this.op2 = right;
     }
 
+    public ASTNode getOp1() {
+        return op1;
+    }
+
+    public ASTNode getOp2() {
+        return op2;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
 
     @Override
     public Object execute(HashMap<String, Object> Table) {
