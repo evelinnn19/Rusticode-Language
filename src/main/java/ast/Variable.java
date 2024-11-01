@@ -1,7 +1,7 @@
 package ast;
 
 import java.util.HashMap;
-import java.util.Map;
+
 
 public class Variable implements ASTNode{
     private String name;
