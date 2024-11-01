@@ -23,59 +23,11 @@ public interface RusticodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSentence(RusticodeParser.SentenceContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#varDeclaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarDeclaration(RusticodeParser.VarDeclarationContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link RusticodeParser#assignmentStmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAssignmentStmt(RusticodeParser.AssignmentStmtContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#type}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitType(RusticodeParser.TypeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExpression(RusticodeParser.ExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#logicalExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLogicalExpr(RusticodeParser.LogicalExprContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#comparisonExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitComparisonExpr(RusticodeParser.ComparisonExprContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#arithmeticExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArithmeticExpr(RusticodeParser.ArithmeticExprContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#term}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTerm(RusticodeParser.TermContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RusticodeParser#factor}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFactor(RusticodeParser.FactorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RusticodeParser#ifStmt}.
 	 * @param ctx the parse tree
@@ -94,4 +46,16 @@ public interface RusticodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPrintStmt(RusticodeParser.PrintStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RusticodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpression(RusticodeParser.ExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RusticodeParser#info}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInfo(RusticodeParser.InfoContext ctx);
 }

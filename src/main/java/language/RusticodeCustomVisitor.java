@@ -1,4 +1,5 @@
 package language;
 
-public class RusticodeCustomVisitor extends RusticodeBaseVisitor{
+public class RusticodeCustomVisitor extends RusticodeBaseVisitor<Object>{
+
 }

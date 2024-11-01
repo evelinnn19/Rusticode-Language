@@ -1,6 +1,6 @@
 package ast;
 
-import ui.RusticodeGUI;
+import ui.GUIRusticode;
 import java.util.HashMap;
 
 public class Print implements ASTNode {
@@ -14,7 +14,7 @@ public class Print implements ASTNode {
     public Object execute(HashMap<String, Object> Table) {
         String msg = String.valueOf(data.execute(Table));
         msg = msg.replaceAll("\"", "");
-        RusticodeGUI.getInstance().appendOutput(msg + "\n");
+       GUIRusticode.getInstance().appendOutput(msg);
         return null;
     }
 }

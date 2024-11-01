@@ -7,6 +7,7 @@ public class Assignment implements ASTNode {
     private ASTNode expression;
 
     public Assignment(String id, ASTNode expression) {
+        super();
         this.id = id;
         this.expression = expression;
     }

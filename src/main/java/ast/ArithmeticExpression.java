@@ -8,11 +8,11 @@ public class ArithmeticExpression implements ASTNode {
     private ASTNode op1;
     private ASTNode op2;
 
-    public ArithmeticExpression(String operator, ASTNode left, ASTNode right) {
+    public ArithmeticExpression(String operator, ASTNode op1, ASTNode op2) {
         super();
         this.operator = operator;
-        this.op1 = left;
-        this.op2 = right;
+        this.op1 = op1;
+        this.op2 = op2;
     }
 
 

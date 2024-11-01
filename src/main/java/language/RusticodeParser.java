@@ -22,41 +22,35 @@ public class RusticodeParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		IF=1, ELSE=2, WHILE=3, PRINT=4, START=5, END=6, INT=7, FLOAT=8, STRING=9, 
-		PLUS=10, MINUS=11, MULT=12, DIV=13, ASSIGN=14, GT=15, LT=16, GTE=17, LTE=18, 
-		EQ=19, NEQ=20, AND=21, OR=22, LPAREN=23, RPAREN=24, LBRACE=25, RBRACE=26, 
-		SEMICOLON=27, NUMBER=28, STRING_LITERAL=29, BOOL_LITERAL=30, ID=31, WS=32, 
-		COMMENT=33;
+		IF=1, ELSE=2, WHILE=3, PRINT=4, START=5, END=6, SUM=7, RES=8, MULT=9, 
+		DIV=10, ASSIGN=11, GT=12, LT=13, GTE=14, LTE=15, EQ=16, NEQ=17, AND=18, 
+		OR=19, NOT=20, LPAREN=21, RPAREN=22, LBRACE=23, RBRACE=24, SEMICOLON=25, 
+		NUMBER=26, STRING=27, BOOL=28, ID=29, WS=30, COMMENT=31;
 	public static final int
-		RULE_program = 0, RULE_sentence = 1, RULE_varDeclaration = 2, RULE_assignmentStmt = 3, 
-		RULE_type = 4, RULE_expression = 5, RULE_logicalExpr = 6, RULE_comparisonExpr = 7, 
-		RULE_arithmeticExpr = 8, RULE_term = 9, RULE_factor = 10, RULE_ifStmt = 11, 
-		RULE_whileStmt = 12, RULE_printStmt = 13;
+		RULE_program = 0, RULE_sentence = 1, RULE_assignmentStmt = 2, RULE_ifStmt = 3, 
+		RULE_whileStmt = 4, RULE_printStmt = 5, RULE_expression = 6, RULE_info = 7;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"program", "sentence", "varDeclaration", "assignmentStmt", "type", "expression", 
-			"logicalExpr", "comparisonExpr", "arithmeticExpr", "term", "factor", 
-			"ifStmt", "whileStmt", "printStmt"
+			"program", "sentence", "assignmentStmt", "ifStmt", "whileStmt", "printStmt", 
+			"expression", "info"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'if'", "'else'", "'while'", "'print'", "'start:'", "'end'", "'int'", 
-			"'float'", "'string'", "'+'", "'-'", "'*'", "'/'", "'='", "'>'", "'<'", 
-			"'>='", "'<='", "'=='", "'!='", "'&&'", "'||'", "'('", "')'", "'{'", 
-			"'}'", "';'"
+			null, "'if'", "'else'", "'while'", "'print'", "'start:'", "'end'", "'+'", 
+			"'-'", "'*'", "'/'", "'='", "'>'", "'<'", "'>='", "'<='", "'=='", "'!='", 
+			"'&&'", "'||'", "'!'", "'('", "')'", "'{'", "'}'", "';'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "IF", "ELSE", "WHILE", "PRINT", "START", "END", "INT", "FLOAT", 
-			"STRING", "PLUS", "MINUS", "MULT", "DIV", "ASSIGN", "GT", "LT", "GTE", 
-			"LTE", "EQ", "NEQ", "AND", "OR", "LPAREN", "RPAREN", "LBRACE", "RBRACE", 
-			"SEMICOLON", "NUMBER", "STRING_LITERAL", "BOOL_LITERAL", "ID", "WS", 
-			"COMMENT"
+			null, "IF", "ELSE", "WHILE", "PRINT", "START", "END", "SUM", "RES", "MULT", 
+			"DIV", "ASSIGN", "GT", "LT", "GTE", "LTE", "EQ", "NEQ", "AND", "OR", 
+			"NOT", "LPAREN", "RPAREN", "LBRACE", "RBRACE", "SEMICOLON", "NUMBER", 
+			"STRING", "BOOL", "ID", "WS", "COMMENT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -115,6 +109,8 @@ public class RusticodeParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ProgramContext extends ParserRuleContext {
+		public TerminalNode START() { return getToken(RusticodeParser.START, 0); }
+		public TerminalNode END() { return getToken(RusticodeParser.END, 0); }
 		public List<SentenceContext> sentence() {
 			return getRuleContexts(SentenceContext.class);
 		}
@@ -147,20 +143,24 @@ public class RusticodeParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(31);
+			setState(16);
+			match(START);
+			setState(20);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 4034921370L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1009778714L) != 0)) {
 				{
 				{
-				setState(28);
+				setState(17);
 				sentence();
 				}
 				}
-				setState(33);
+				setState(22);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
+			setState(23);
+			match(END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -177,19 +177,15 @@ public class RusticodeParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class SentenceContext extends ParserRuleContext {
 		public ASTNode node;
-		public VarDeclarationContext varDeclaration;
 		public AssignmentStmtContext assignmentStmt;
 		public ExpressionContext expression;
 		public IfStmtContext ifStmt;
 		public WhileStmtContext whileStmt;
 		public PrintStmtContext printStmt;
-		public VarDeclarationContext varDeclaration() {
-			return getRuleContext(VarDeclarationContext.class,0);
-		}
-		public TerminalNode SEMICOLON() { return getToken(RusticodeParser.SEMICOLON, 0); }
 		public AssignmentStmtContext assignmentStmt() {
 			return getRuleContext(AssignmentStmtContext.class,0);
 		}
+		public TerminalNode SEMICOLON() { return getToken(RusticodeParser.SEMICOLON, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -225,61 +221,51 @@ public class RusticodeParser extends Parser {
 		SentenceContext _localctx = new SentenceContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_sentence);
 		try {
-			setState(56);
+			setState(43);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(34);
-				((SentenceContext)_localctx).varDeclaration = varDeclaration();
-				setState(35);
+				setState(25);
+				((SentenceContext)_localctx).assignmentStmt = assignmentStmt();
+				setState(26);
 				match(SEMICOLON);
-				 ((SentenceContext)_localctx).node =  ((SentenceContext)_localctx).varDeclaration.node; 
+				 ((SentenceContext)_localctx).node =  ((SentenceContext)_localctx).assignmentStmt.node; 
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(38);
-				((SentenceContext)_localctx).assignmentStmt = assignmentStmt();
-				setState(39);
+				setState(29);
+				((SentenceContext)_localctx).expression = expression(0);
+				setState(30);
 				match(SEMICOLON);
-				 ((SentenceContext)_localctx).node =  ((SentenceContext)_localctx).assignmentStmt.node; 
+				 ((SentenceContext)_localctx).node =  ((SentenceContext)_localctx).expression.node; 
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(42);
-				((SentenceContext)_localctx).expression = expression();
-				setState(43);
-				match(SEMICOLON);
-				 ((SentenceContext)_localctx).node =  ((SentenceContext)_localctx).expression.node; 
+				setState(33);
+				((SentenceContext)_localctx).ifStmt = ifStmt();
+				 ((SentenceContext)_localctx).node =  ((SentenceContext)_localctx).ifStmt.node; 
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(46);
-				((SentenceContext)_localctx).ifStmt = ifStmt();
-				 ((SentenceContext)_localctx).node =  ((SentenceContext)_localctx).ifStmt.node; 
+				setState(36);
+				((SentenceContext)_localctx).whileStmt = whileStmt();
+				 ((SentenceContext)_localctx).node =  ((SentenceContext)_localctx).whileStmt.node; 
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(49);
-				((SentenceContext)_localctx).whileStmt = whileStmt();
-				 ((SentenceContext)_localctx).node =  ((SentenceContext)_localctx).whileStmt.node; 
-				}
-				break;
-			case 6:
-				enterOuterAlt(_localctx, 6);
-				{
-				setState(52);
+				setState(39);
 				((SentenceContext)_localctx).printStmt = printStmt();
-				setState(53);
+				setState(40);
 				match(SEMICOLON);
 				 ((SentenceContext)_localctx).node =  ((SentenceContext)_localctx).printStmt.node; 
 				}
@@ -298,84 +284,10 @@ public class RusticodeParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class VarDeclarationContext extends ParserRuleContext {
-		public ASTNode node;
-		public TypeContext type;
-		public Token ID;
-		public ExpressionContext expr;
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
-		}
-		public TerminalNode ID() { return getToken(RusticodeParser.ID, 0); }
-		public TerminalNode ASSIGN() { return getToken(RusticodeParser.ASSIGN, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public VarDeclarationContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_varDeclaration; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).enterVarDeclaration(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitVarDeclaration(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitVarDeclaration(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final VarDeclarationContext varDeclaration() throws RecognitionException {
-		VarDeclarationContext _localctx = new VarDeclarationContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_varDeclaration);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(58);
-			((VarDeclarationContext)_localctx).type = type();
-			setState(59);
-			((VarDeclarationContext)_localctx).ID = match(ID);
-			setState(62);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==ASSIGN) {
-				{
-				setState(60);
-				match(ASSIGN);
-				setState(61);
-				((VarDeclarationContext)_localctx).expr = expression();
-				}
-			}
-
-
-			            ((VarDeclarationContext)_localctx).node =  (((VarDeclarationContext)_localctx).expr != null)
-			                ? new VariableDeclaration((((VarDeclarationContext)_localctx).type!=null?_input.getText(((VarDeclarationContext)_localctx).type.start,((VarDeclarationContext)_localctx).type.stop):null), (((VarDeclarationContext)_localctx).ID!=null?((VarDeclarationContext)_localctx).ID.getText():null), ((VarDeclarationContext)_localctx).expr.node)
-			                : new VariableDeclaration((((VarDeclarationContext)_localctx).type!=null?_input.getText(((VarDeclarationContext)_localctx).type.start,((VarDeclarationContext)_localctx).type.stop):null), (((VarDeclarationContext)_localctx).ID!=null?((VarDeclarationContext)_localctx).ID.getText():null), null);
-			        
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
 	public static class AssignmentStmtContext extends ParserRuleContext {
 		public ASTNode node;
 		public Token ID;
-		public ExpressionContext expr;
+		public ExpressionContext expression;
 		public TerminalNode ID() { return getToken(RusticodeParser.ID, 0); }
 		public TerminalNode ASSIGN() { return getToken(RusticodeParser.ASSIGN, 0); }
 		public ExpressionContext expression() {
@@ -402,645 +314,17 @@ public class RusticodeParser extends Parser {
 
 	public final AssignmentStmtContext assignmentStmt() throws RecognitionException {
 		AssignmentStmtContext _localctx = new AssignmentStmtContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_assignmentStmt);
+		enterRule(_localctx, 4, RULE_assignmentStmt);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(66);
+			setState(45);
 			((AssignmentStmtContext)_localctx).ID = match(ID);
-			setState(67);
+			setState(46);
 			match(ASSIGN);
-			setState(68);
-			((AssignmentStmtContext)_localctx).expr = expression();
-			 ((AssignmentStmtContext)_localctx).node =  new Assignment((((AssignmentStmtContext)_localctx).ID!=null?((AssignmentStmtContext)_localctx).ID.getText():null), ((AssignmentStmtContext)_localctx).expr.node); 
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class TypeContext extends ParserRuleContext {
-		public TerminalNode INT() { return getToken(RusticodeParser.INT, 0); }
-		public TerminalNode FLOAT() { return getToken(RusticodeParser.FLOAT, 0); }
-		public TerminalNode STRING() { return getToken(RusticodeParser.STRING, 0); }
-		public TypeContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_type; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).enterType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitType(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitType(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final TypeContext type() throws RecognitionException {
-		TypeContext _localctx = new TypeContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_type);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(71);
-			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 896L) != 0)) ) {
-			_errHandler.recoverInline(this);
-			}
-			else {
-				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-				_errHandler.reportMatch(this);
-				consume();
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ExpressionContext extends ParserRuleContext {
-		public ASTNode node;
-		public LogicalExprContext logicalExpr;
-		public LogicalExprContext logicalExpr() {
-			return getRuleContext(LogicalExprContext.class,0);
-		}
-		public ExpressionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_expression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).enterExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final ExpressionContext expression() throws RecognitionException {
-		ExpressionContext _localctx = new ExpressionContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_expression);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(73);
-			((ExpressionContext)_localctx).logicalExpr = logicalExpr();
-			 ((ExpressionContext)_localctx).node =  ((ExpressionContext)_localctx).logicalExpr.node; 
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class LogicalExprContext extends ParserRuleContext {
-		public ASTNode node;
-		public ComparisonExprContext left;
-		public Token op;
-		public ComparisonExprContext right;
-		public ComparisonExprContext comparisonExpr;
-		public List<ComparisonExprContext> comparisonExpr() {
-			return getRuleContexts(ComparisonExprContext.class);
-		}
-		public ComparisonExprContext comparisonExpr(int i) {
-			return getRuleContext(ComparisonExprContext.class,i);
-		}
-		public List<TerminalNode> AND() { return getTokens(RusticodeParser.AND); }
-		public TerminalNode AND(int i) {
-			return getToken(RusticodeParser.AND, i);
-		}
-		public List<TerminalNode> OR() { return getTokens(RusticodeParser.OR); }
-		public TerminalNode OR(int i) {
-			return getToken(RusticodeParser.OR, i);
-		}
-		public LogicalExprContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_logicalExpr; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).enterLogicalExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitLogicalExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitLogicalExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final LogicalExprContext logicalExpr() throws RecognitionException {
-		LogicalExprContext _localctx = new LogicalExprContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_logicalExpr);
-		int _la;
-		try {
-			setState(89);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
-			case 1:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(76);
-				((LogicalExprContext)_localctx).left = comparisonExpr();
-				setState(83);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==AND || _la==OR) {
-					{
-					{
-					setState(77);
-					((LogicalExprContext)_localctx).op = _input.LT(1);
-					_la = _input.LA(1);
-					if ( !(_la==AND || _la==OR) ) {
-						((LogicalExprContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-					}
-					else {
-						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-						_errHandler.reportMatch(this);
-						consume();
-					}
-					setState(78);
-					((LogicalExprContext)_localctx).right = comparisonExpr();
-					 ((LogicalExprContext)_localctx).node =  new LogicalExpression((((LogicalExprContext)_localctx).op!=null?((LogicalExprContext)_localctx).op.getText():null), ((LogicalExprContext)_localctx).left.node, ((LogicalExprContext)_localctx).right.node); 
-					}
-					}
-					setState(85);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				}
-				break;
-			case 2:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(86);
-				((LogicalExprContext)_localctx).comparisonExpr = comparisonExpr();
-				 ((LogicalExprContext)_localctx).node =  ((LogicalExprContext)_localctx).comparisonExpr.node; 
-				}
-				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ComparisonExprContext extends ParserRuleContext {
-		public ASTNode node;
-		public ArithmeticExprContext left;
-		public Token op;
-		public ArithmeticExprContext right;
-		public ArithmeticExprContext arithmeticExpr;
-		public List<ArithmeticExprContext> arithmeticExpr() {
-			return getRuleContexts(ArithmeticExprContext.class);
-		}
-		public ArithmeticExprContext arithmeticExpr(int i) {
-			return getRuleContext(ArithmeticExprContext.class,i);
-		}
-		public List<TerminalNode> GT() { return getTokens(RusticodeParser.GT); }
-		public TerminalNode GT(int i) {
-			return getToken(RusticodeParser.GT, i);
-		}
-		public List<TerminalNode> LT() { return getTokens(RusticodeParser.LT); }
-		public TerminalNode LT(int i) {
-			return getToken(RusticodeParser.LT, i);
-		}
-		public List<TerminalNode> GTE() { return getTokens(RusticodeParser.GTE); }
-		public TerminalNode GTE(int i) {
-			return getToken(RusticodeParser.GTE, i);
-		}
-		public List<TerminalNode> LTE() { return getTokens(RusticodeParser.LTE); }
-		public TerminalNode LTE(int i) {
-			return getToken(RusticodeParser.LTE, i);
-		}
-		public List<TerminalNode> EQ() { return getTokens(RusticodeParser.EQ); }
-		public TerminalNode EQ(int i) {
-			return getToken(RusticodeParser.EQ, i);
-		}
-		public List<TerminalNode> NEQ() { return getTokens(RusticodeParser.NEQ); }
-		public TerminalNode NEQ(int i) {
-			return getToken(RusticodeParser.NEQ, i);
-		}
-		public ComparisonExprContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_comparisonExpr; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).enterComparisonExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitComparisonExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitComparisonExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final ComparisonExprContext comparisonExpr() throws RecognitionException {
-		ComparisonExprContext _localctx = new ComparisonExprContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_comparisonExpr);
-		int _la;
-		try {
-			setState(104);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
-			case 1:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(91);
-				((ComparisonExprContext)_localctx).left = arithmeticExpr();
-				setState(98);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 2064384L) != 0)) {
-					{
-					{
-					setState(92);
-					((ComparisonExprContext)_localctx).op = _input.LT(1);
-					_la = _input.LA(1);
-					if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 2064384L) != 0)) ) {
-						((ComparisonExprContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-					}
-					else {
-						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-						_errHandler.reportMatch(this);
-						consume();
-					}
-					setState(93);
-					((ComparisonExprContext)_localctx).right = arithmeticExpr();
-					 ((ComparisonExprContext)_localctx).node =  new ComparativeExpression((((ComparisonExprContext)_localctx).op!=null?((ComparisonExprContext)_localctx).op.getText():null), ((ComparisonExprContext)_localctx).left.node, ((ComparisonExprContext)_localctx).right.node); 
-					}
-					}
-					setState(100);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				}
-				break;
-			case 2:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(101);
-				((ComparisonExprContext)_localctx).arithmeticExpr = arithmeticExpr();
-				 ((ComparisonExprContext)_localctx).node =  ((ComparisonExprContext)_localctx).arithmeticExpr.node; 
-				}
-				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ArithmeticExprContext extends ParserRuleContext {
-		public ASTNode node;
-		public TermContext left;
-		public Token op;
-		public TermContext right;
-		public TermContext term;
-		public List<TermContext> term() {
-			return getRuleContexts(TermContext.class);
-		}
-		public TermContext term(int i) {
-			return getRuleContext(TermContext.class,i);
-		}
-		public List<TerminalNode> PLUS() { return getTokens(RusticodeParser.PLUS); }
-		public TerminalNode PLUS(int i) {
-			return getToken(RusticodeParser.PLUS, i);
-		}
-		public List<TerminalNode> MINUS() { return getTokens(RusticodeParser.MINUS); }
-		public TerminalNode MINUS(int i) {
-			return getToken(RusticodeParser.MINUS, i);
-		}
-		public ArithmeticExprContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_arithmeticExpr; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).enterArithmeticExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitArithmeticExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitArithmeticExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final ArithmeticExprContext arithmeticExpr() throws RecognitionException {
-		ArithmeticExprContext _localctx = new ArithmeticExprContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_arithmeticExpr);
-		int _la;
-		try {
-			setState(119);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
-			case 1:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(106);
-				((ArithmeticExprContext)_localctx).left = term();
-				setState(113);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==PLUS || _la==MINUS) {
-					{
-					{
-					setState(107);
-					((ArithmeticExprContext)_localctx).op = _input.LT(1);
-					_la = _input.LA(1);
-					if ( !(_la==PLUS || _la==MINUS) ) {
-						((ArithmeticExprContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-					}
-					else {
-						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-						_errHandler.reportMatch(this);
-						consume();
-					}
-					setState(108);
-					((ArithmeticExprContext)_localctx).right = term();
-					 ((ArithmeticExprContext)_localctx).node =  new ArithmeticExpression((((ArithmeticExprContext)_localctx).op!=null?((ArithmeticExprContext)_localctx).op.getText():null), ((ArithmeticExprContext)_localctx).left.node, ((ArithmeticExprContext)_localctx).right.node); 
-					}
-					}
-					setState(115);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				}
-				break;
-			case 2:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(116);
-				((ArithmeticExprContext)_localctx).term = term();
-				 ((ArithmeticExprContext)_localctx).node =  ((ArithmeticExprContext)_localctx).term.node; 
-				}
-				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class TermContext extends ParserRuleContext {
-		public ASTNode node;
-		public FactorContext left;
-		public Token op;
-		public FactorContext right;
-		public FactorContext factor;
-		public List<FactorContext> factor() {
-			return getRuleContexts(FactorContext.class);
-		}
-		public FactorContext factor(int i) {
-			return getRuleContext(FactorContext.class,i);
-		}
-		public List<TerminalNode> MULT() { return getTokens(RusticodeParser.MULT); }
-		public TerminalNode MULT(int i) {
-			return getToken(RusticodeParser.MULT, i);
-		}
-		public List<TerminalNode> DIV() { return getTokens(RusticodeParser.DIV); }
-		public TerminalNode DIV(int i) {
-			return getToken(RusticodeParser.DIV, i);
-		}
-		public TermContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_term; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).enterTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitTerm(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitTerm(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final TermContext term() throws RecognitionException {
-		TermContext _localctx = new TermContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_term);
-		int _la;
-		try {
-			setState(134);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
-			case 1:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(121);
-				((TermContext)_localctx).left = factor();
-				setState(128);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==MULT || _la==DIV) {
-					{
-					{
-					setState(122);
-					((TermContext)_localctx).op = _input.LT(1);
-					_la = _input.LA(1);
-					if ( !(_la==MULT || _la==DIV) ) {
-						((TermContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-					}
-					else {
-						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-						_errHandler.reportMatch(this);
-						consume();
-					}
-					setState(123);
-					((TermContext)_localctx).right = factor();
-					 ((TermContext)_localctx).node =  new ArithmeticExpression((((TermContext)_localctx).op!=null?((TermContext)_localctx).op.getText():null), ((TermContext)_localctx).left.node, ((TermContext)_localctx).right.node); 
-					}
-					}
-					setState(130);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				}
-				break;
-			case 2:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(131);
-				((TermContext)_localctx).factor = factor();
-				 ((TermContext)_localctx).node =  ((TermContext)_localctx).factor.node; 
-				}
-				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class FactorContext extends ParserRuleContext {
-		public ASTNode node;
-		public ExpressionContext expr;
-		public Token NUMBER;
-		public Token STRING_LITERAL;
-		public Token BOOL_LITERAL;
-		public Token ID;
-		public TerminalNode LPAREN() { return getToken(RusticodeParser.LPAREN, 0); }
-		public TerminalNode RPAREN() { return getToken(RusticodeParser.RPAREN, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode NUMBER() { return getToken(RusticodeParser.NUMBER, 0); }
-		public TerminalNode STRING_LITERAL() { return getToken(RusticodeParser.STRING_LITERAL, 0); }
-		public TerminalNode BOOL_LITERAL() { return getToken(RusticodeParser.BOOL_LITERAL, 0); }
-		public TerminalNode ID() { return getToken(RusticodeParser.ID, 0); }
-		public FactorContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_factor; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).enterFactor(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitFactor(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitFactor(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final FactorContext factor() throws RecognitionException {
-		FactorContext _localctx = new FactorContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_factor);
-		try {
-			setState(149);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case LPAREN:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(136);
-				match(LPAREN);
-				setState(137);
-				((FactorContext)_localctx).expr = expression();
-				setState(138);
-				match(RPAREN);
-				 ((FactorContext)_localctx).node =  ((FactorContext)_localctx).expr.node; 
-				}
-				break;
-			case NUMBER:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(141);
-				((FactorContext)_localctx).NUMBER = match(NUMBER);
-				 ((FactorContext)_localctx).node =  new Constant((((FactorContext)_localctx).NUMBER!=null?((FactorContext)_localctx).NUMBER.getText():null)); 
-				}
-				break;
-			case STRING_LITERAL:
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(143);
-				((FactorContext)_localctx).STRING_LITERAL = match(STRING_LITERAL);
-				 ((FactorContext)_localctx).node =  new Constant((((FactorContext)_localctx).STRING_LITERAL!=null?((FactorContext)_localctx).STRING_LITERAL.getText():null)); 
-				}
-				break;
-			case BOOL_LITERAL:
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(145);
-				((FactorContext)_localctx).BOOL_LITERAL = match(BOOL_LITERAL);
-				 ((FactorContext)_localctx).node =  new Constant((((FactorContext)_localctx).BOOL_LITERAL!=null?((FactorContext)_localctx).BOOL_LITERAL.getText():null)); 
-				}
-				break;
-			case ID:
-				enterOuterAlt(_localctx, 5);
-				{
-				setState(147);
-				((FactorContext)_localctx).ID = match(ID);
-				 ((FactorContext)_localctx).node =  new Variable((((FactorContext)_localctx).ID!=null?((FactorContext)_localctx).ID.getText():null)); 
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+			setState(47);
+			((AssignmentStmtContext)_localctx).expression = expression(0);
+			 ((AssignmentStmtContext)_localctx).node =  new Assignment((((AssignmentStmtContext)_localctx).ID!=null?((AssignmentStmtContext)_localctx).ID.getText():null), ((AssignmentStmtContext)_localctx).expression.node); 
 			}
 		}
 		catch (RecognitionException re) {
@@ -1057,11 +341,14 @@ public class RusticodeParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class IfStmtContext extends ParserRuleContext {
 		public ASTNode node;
-		public ExpressionContext cond;
+		public ExpressionContext expression;
 		public SentenceContext thenStmt;
 		public SentenceContext elseStmt;
 		public TerminalNode IF() { return getToken(RusticodeParser.IF, 0); }
 		public TerminalNode LPAREN() { return getToken(RusticodeParser.LPAREN, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
 		public TerminalNode RPAREN() { return getToken(RusticodeParser.RPAREN, 0); }
 		public List<TerminalNode> LBRACE() { return getTokens(RusticodeParser.LBRACE); }
 		public TerminalNode LBRACE(int i) {
@@ -1070,9 +357,6 @@ public class RusticodeParser extends Parser {
 		public List<TerminalNode> RBRACE() { return getTokens(RusticodeParser.RBRACE); }
 		public TerminalNode RBRACE(int i) {
 			return getToken(RusticodeParser.RBRACE, i);
-		}
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
 		}
 		public TerminalNode ELSE() { return getToken(RusticodeParser.ELSE, 0); }
 		public List<SentenceContext> sentence() {
@@ -1102,72 +386,72 @@ public class RusticodeParser extends Parser {
 
 	public final IfStmtContext ifStmt() throws RecognitionException {
 		IfStmtContext _localctx = new IfStmtContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_ifStmt);
+		enterRule(_localctx, 6, RULE_ifStmt);
 
-		    ArrayList<ASTNode> thenBlock = new ArrayList<>();
-		    ArrayList<ASTNode> elseBlock = new ArrayList<>();
+		    ArrayList<ASTNode> thenBody = new ArrayList<>();
+		    ArrayList<ASTNode> elseBody = new ArrayList<>();
 
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(151);
+			setState(50);
 			match(IF);
-			setState(152);
+			setState(51);
 			match(LPAREN);
-			setState(153);
-			((IfStmtContext)_localctx).cond = expression();
-			setState(154);
+			setState(52);
+			((IfStmtContext)_localctx).expression = expression(0);
+			setState(53);
 			match(RPAREN);
-			setState(155);
+			setState(54);
 			match(LBRACE);
-			setState(161);
+			setState(60);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 4034921370L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1009778714L) != 0)) {
 				{
 				{
-				setState(156);
+				setState(55);
 				((IfStmtContext)_localctx).thenStmt = sentence();
-				 thenBlock.add(((IfStmtContext)_localctx).thenStmt.node); 
+				 thenBody.add(((IfStmtContext)_localctx).thenStmt.node); 
 				}
 				}
-				setState(163);
+				setState(62);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(164);
+			setState(63);
 			match(RBRACE);
-			setState(176);
+			setState(75);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==ELSE) {
 				{
-				setState(165);
+				setState(64);
 				match(ELSE);
-				setState(166);
+				setState(65);
 				match(LBRACE);
-				setState(172);
+				setState(71);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 4034921370L) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1009778714L) != 0)) {
 					{
 					{
-					setState(167);
+					setState(66);
 					((IfStmtContext)_localctx).elseStmt = sentence();
-					 elseBlock.add(((IfStmtContext)_localctx).elseStmt.node); 
+					 elseBody.add(((IfStmtContext)_localctx).elseStmt.node); 
 					}
 					}
-					setState(174);
+					setState(73);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(175);
+				setState(74);
 				match(RBRACE);
 				}
 			}
 
-			 ((IfStmtContext)_localctx).node =  new If(((IfStmtContext)_localctx).cond.node, thenBlock, elseBlock); 
+			 ((IfStmtContext)_localctx).node =  new If(((IfStmtContext)_localctx).expression.node, thenBody, elseBody); 
 			}
 		}
 		catch (RecognitionException re) {
@@ -1184,16 +468,16 @@ public class RusticodeParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class WhileStmtContext extends ParserRuleContext {
 		public ASTNode node;
-		public ExpressionContext cond;
+		public ExpressionContext expression;
 		public SentenceContext bodyStmt;
 		public TerminalNode WHILE() { return getToken(RusticodeParser.WHILE, 0); }
 		public TerminalNode LPAREN() { return getToken(RusticodeParser.LPAREN, 0); }
-		public TerminalNode RPAREN() { return getToken(RusticodeParser.RPAREN, 0); }
-		public TerminalNode LBRACE() { return getToken(RusticodeParser.LBRACE, 0); }
-		public TerminalNode RBRACE() { return getToken(RusticodeParser.RBRACE, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
+		public TerminalNode RPAREN() { return getToken(RusticodeParser.RPAREN, 0); }
+		public TerminalNode LBRACE() { return getToken(RusticodeParser.LBRACE, 0); }
+		public TerminalNode RBRACE() { return getToken(RusticodeParser.RBRACE, 0); }
 		public List<SentenceContext> sentence() {
 			return getRuleContexts(SentenceContext.class);
 		}
@@ -1221,42 +505,42 @@ public class RusticodeParser extends Parser {
 
 	public final WhileStmtContext whileStmt() throws RecognitionException {
 		WhileStmtContext _localctx = new WhileStmtContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_whileStmt);
+		enterRule(_localctx, 8, RULE_whileStmt);
 
-		    ArrayList<ASTNode> bodyBlock = new ArrayList<>();
+		    ArrayList<ASTNode> whileBody = new ArrayList<>();
 
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(180);
+			setState(79);
 			match(WHILE);
-			setState(181);
+			setState(80);
 			match(LPAREN);
-			setState(182);
-			((WhileStmtContext)_localctx).cond = expression();
-			setState(183);
+			setState(81);
+			((WhileStmtContext)_localctx).expression = expression(0);
+			setState(82);
 			match(RPAREN);
-			setState(184);
+			setState(83);
 			match(LBRACE);
-			setState(190);
+			setState(89);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 4034921370L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1009778714L) != 0)) {
 				{
 				{
-				setState(185);
+				setState(84);
 				((WhileStmtContext)_localctx).bodyStmt = sentence();
-				 bodyBlock.add(((WhileStmtContext)_localctx).bodyStmt.node); 
+				 whileBody.add(((WhileStmtContext)_localctx).bodyStmt.node); 
 				}
 				}
-				setState(192);
+				setState(91);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(193);
+			setState(92);
 			match(RBRACE);
-			 ((WhileStmtContext)_localctx).node =  new While(((WhileStmtContext)_localctx).cond.node, bodyBlock); 
+			 ((WhileStmtContext)_localctx).node =  new While(((WhileStmtContext)_localctx).expression.node, whileBody); 
 			}
 		}
 		catch (RecognitionException re) {
@@ -1273,13 +557,13 @@ public class RusticodeParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class PrintStmtContext extends ParserRuleContext {
 		public ASTNode node;
-		public ExpressionContext expr;
+		public ExpressionContext expression;
 		public TerminalNode PRINT() { return getToken(RusticodeParser.PRINT, 0); }
 		public TerminalNode LPAREN() { return getToken(RusticodeParser.LPAREN, 0); }
-		public TerminalNode RPAREN() { return getToken(RusticodeParser.RPAREN, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
+		public TerminalNode RPAREN() { return getToken(RusticodeParser.RPAREN, 0); }
 		public PrintStmtContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1301,19 +585,19 @@ public class RusticodeParser extends Parser {
 
 	public final PrintStmtContext printStmt() throws RecognitionException {
 		PrintStmtContext _localctx = new PrintStmtContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_printStmt);
+		enterRule(_localctx, 10, RULE_printStmt);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(196);
+			setState(95);
 			match(PRINT);
-			setState(197);
+			setState(96);
 			match(LPAREN);
-			setState(198);
-			((PrintStmtContext)_localctx).expr = expression();
-			setState(199);
+			setState(97);
+			((PrintStmtContext)_localctx).expression = expression(0);
+			setState(98);
 			match(RPAREN);
-			 ((PrintStmtContext)_localctx).node =  new Print(((PrintStmtContext)_localctx).expr.node); 
+			 ((PrintStmtContext)_localctx).node =  new Print(((PrintStmtContext)_localctx).expression.node); 
 			}
 		}
 		catch (RecognitionException re) {
@@ -1327,131 +611,504 @@ public class RusticodeParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionContext extends ParserRuleContext {
+		public ASTNode node;
+		public ExpressionContext e1;
+		public Token op;
+		public ExpressionContext expression;
+		public InfoContext info;
+		public ExpressionContext e2;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode NOT() { return getToken(RusticodeParser.NOT, 0); }
+		public InfoContext info() {
+			return getRuleContext(InfoContext.class,0);
+		}
+		public TerminalNode AND() { return getToken(RusticodeParser.AND, 0); }
+		public TerminalNode OR() { return getToken(RusticodeParser.OR, 0); }
+		public TerminalNode MULT() { return getToken(RusticodeParser.MULT, 0); }
+		public TerminalNode DIV() { return getToken(RusticodeParser.DIV, 0); }
+		public TerminalNode SUM() { return getToken(RusticodeParser.SUM, 0); }
+		public TerminalNode RES() { return getToken(RusticodeParser.RES, 0); }
+		public TerminalNode GT() { return getToken(RusticodeParser.GT, 0); }
+		public TerminalNode LT() { return getToken(RusticodeParser.LT, 0); }
+		public TerminalNode GTE() { return getToken(RusticodeParser.GTE, 0); }
+		public TerminalNode LTE() { return getToken(RusticodeParser.LTE, 0); }
+		public TerminalNode EQ() { return getToken(RusticodeParser.EQ, 0); }
+		public TerminalNode NEQ() { return getToken(RusticodeParser.NEQ, 0); }
+		public ExpressionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_expression; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).enterExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitExpression(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitExpression(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ExpressionContext expression() throws RecognitionException {
+		return expression(0);
+	}
+
+	private ExpressionContext expression(int _p) throws RecognitionException {
+		ParserRuleContext _parentctx = _ctx;
+		int _parentState = getState();
+		ExpressionContext _localctx = new ExpressionContext(_ctx, _parentState);
+		ExpressionContext _prevctx = _localctx;
+		int _startState = 12;
+		enterRecursionRule(_localctx, 12, RULE_expression, _p);
+		int _la;
+		try {
+			int _alt;
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(109);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case NOT:
+				{
+				setState(102);
+				((ExpressionContext)_localctx).op = match(NOT);
+				setState(103);
+				((ExpressionContext)_localctx).expression = expression(8);
+
+				        ((ExpressionContext)_localctx).node =  new LogicalExpression((((ExpressionContext)_localctx).op!=null?((ExpressionContext)_localctx).op.getText():null), ((ExpressionContext)_localctx).expression.node, null);
+				    
+				}
+				break;
+			case LPAREN:
+			case NUMBER:
+			case STRING:
+			case BOOL:
+			case ID:
+				{
+				setState(106);
+				((ExpressionContext)_localctx).info = info();
+				((ExpressionContext)_localctx).node =  ((ExpressionContext)_localctx).info.node; 
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+			_ctx.stop = _input.LT(-1);
+			setState(149);
+			_errHandler.sync(this);
+			_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					if ( _parseListeners!=null ) triggerExitRuleEvent();
+					_prevctx = _localctx;
+					{
+					setState(147);
+					_errHandler.sync(this);
+					switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
+					case 1:
+						{
+						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx.e1 = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(111);
+						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
+						((ExpressionContext)_localctx).node =  ((ExpressionContext)_localctx).e1.node;
+						setState(113);
+						((ExpressionContext)_localctx).op = match(AND);
+						setState(114);
+						((ExpressionContext)_localctx).e2 = ((ExpressionContext)_localctx).expression = expression(8);
+
+						                          ((ExpressionContext)_localctx).node =  new LogicalExpression((((ExpressionContext)_localctx).op!=null?((ExpressionContext)_localctx).op.getText():null), _localctx.node, ((ExpressionContext)_localctx).e2.node);
+						                      
+						}
+						break;
+					case 2:
+						{
+						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx.e1 = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(117);
+						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
+						((ExpressionContext)_localctx).node =  ((ExpressionContext)_localctx).e1.node;
+						setState(119);
+						((ExpressionContext)_localctx).op = match(OR);
+						setState(120);
+						((ExpressionContext)_localctx).e2 = ((ExpressionContext)_localctx).expression = expression(7);
+
+						                          ((ExpressionContext)_localctx).node =  new LogicalExpression((((ExpressionContext)_localctx).op!=null?((ExpressionContext)_localctx).op.getText():null), _localctx.node, ((ExpressionContext)_localctx).e2.node);
+						                     
+						}
+						break;
+					case 3:
+						{
+						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx.e1 = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(123);
+						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
+						((ExpressionContext)_localctx).node =  ((ExpressionContext)_localctx).e1.node;
+						setState(125);
+						((ExpressionContext)_localctx).op = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==MULT || _la==DIV) ) {
+							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(126);
+						((ExpressionContext)_localctx).e2 = ((ExpressionContext)_localctx).expression = expression(6);
+
+						                      ((ExpressionContext)_localctx).node =  new ArithmeticExpression((((ExpressionContext)_localctx).op!=null?((ExpressionContext)_localctx).op.getText():null), _localctx.node, ((ExpressionContext)_localctx).e2.node);
+						                  
+						}
+						break;
+					case 4:
+						{
+						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx.e1 = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(129);
+						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
+						((ExpressionContext)_localctx).node =  ((ExpressionContext)_localctx).e1.node;
+						setState(131);
+						((ExpressionContext)_localctx).op = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==SUM || _la==RES) ) {
+							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(132);
+						((ExpressionContext)_localctx).e2 = ((ExpressionContext)_localctx).expression = expression(5);
+
+						                      ((ExpressionContext)_localctx).node =  new ArithmeticExpression((((ExpressionContext)_localctx).op!=null?((ExpressionContext)_localctx).op.getText():null), _localctx.node, ((ExpressionContext)_localctx).e2.node);
+						                  
+						}
+						break;
+					case 5:
+						{
+						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx.e1 = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(135);
+						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
+						((ExpressionContext)_localctx).node =  ((ExpressionContext)_localctx).e1.node;
+						setState(137);
+						((ExpressionContext)_localctx).op = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 61440L) != 0)) ) {
+							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(138);
+						((ExpressionContext)_localctx).e2 = ((ExpressionContext)_localctx).expression = expression(4);
+
+						                      ((ExpressionContext)_localctx).node =  new ComparativeExpression((((ExpressionContext)_localctx).op!=null?((ExpressionContext)_localctx).op.getText():null), _localctx.node, ((ExpressionContext)_localctx).e2.node);
+						                  
+						}
+						break;
+					case 6:
+						{
+						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx.e1 = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(141);
+						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+						((ExpressionContext)_localctx).node =  ((ExpressionContext)_localctx).e1.node;
+						setState(143);
+						((ExpressionContext)_localctx).op = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==EQ || _la==NEQ) ) {
+							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(144);
+						((ExpressionContext)_localctx).e2 = ((ExpressionContext)_localctx).expression = expression(3);
+
+						                      ((ExpressionContext)_localctx).node =  new ComparativeExpression((((ExpressionContext)_localctx).op!=null?((ExpressionContext)_localctx).op.getText():null), _localctx.node, ((ExpressionContext)_localctx).e2.node);
+						                  
+						}
+						break;
+					}
+					} 
+				}
+				setState(151);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			unrollRecursionContexts(_parentctx);
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class InfoContext extends ParserRuleContext {
+		public ASTNode node;
+		public ExpressionContext expression;
+		public Token BOOL;
+		public Token NUMBER;
+		public Token ID;
+		public Token STRING;
+		public TerminalNode LPAREN() { return getToken(RusticodeParser.LPAREN, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public TerminalNode RPAREN() { return getToken(RusticodeParser.RPAREN, 0); }
+		public TerminalNode BOOL() { return getToken(RusticodeParser.BOOL, 0); }
+		public TerminalNode NUMBER() { return getToken(RusticodeParser.NUMBER, 0); }
+		public TerminalNode ID() { return getToken(RusticodeParser.ID, 0); }
+		public TerminalNode STRING() { return getToken(RusticodeParser.STRING, 0); }
+		public InfoContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_info; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).enterInfo(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitInfo(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitInfo(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final InfoContext info() throws RecognitionException {
+		InfoContext _localctx = new InfoContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_info);
+		try {
+			setState(165);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case LPAREN:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(152);
+				match(LPAREN);
+				setState(153);
+				((InfoContext)_localctx).expression = expression(0);
+				((InfoContext)_localctx).node =  ((InfoContext)_localctx).expression.node; 
+				setState(155);
+				match(RPAREN);
+				}
+				break;
+			case BOOL:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(157);
+				((InfoContext)_localctx).BOOL = match(BOOL);
+				 ((InfoContext)_localctx).node =  new Constant(Boolean.parseBoolean((((InfoContext)_localctx).BOOL!=null?((InfoContext)_localctx).BOOL.getText():null))); 
+				}
+				break;
+			case NUMBER:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(159);
+				((InfoContext)_localctx).NUMBER = match(NUMBER);
+				 ((InfoContext)_localctx).node =  new Constant(Double.parseDouble((((InfoContext)_localctx).NUMBER!=null?((InfoContext)_localctx).NUMBER.getText():null))); 
+				}
+				break;
+			case ID:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(161);
+				((InfoContext)_localctx).ID = match(ID);
+				 ((InfoContext)_localctx).node =  new Variable(String.valueOf((((InfoContext)_localctx).ID!=null?((InfoContext)_localctx).ID.getText():null))); 
+				}
+				break;
+			case STRING:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(163);
+				((InfoContext)_localctx).STRING = match(STRING);
+				 ((InfoContext)_localctx).node =  new Constant(String.format("\"%s\"", (((InfoContext)_localctx).STRING!=null?((InfoContext)_localctx).STRING.getText():null))); 
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
+		switch (ruleIndex) {
+		case 6:
+			return expression_sempred((ExpressionContext)_localctx, predIndex);
+		}
+		return true;
+	}
+	private boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
+		switch (predIndex) {
+		case 0:
+			return precpred(_ctx, 7);
+		case 1:
+			return precpred(_ctx, 6);
+		case 2:
+			return precpred(_ctx, 5);
+		case 3:
+			return precpred(_ctx, 4);
+		case 4:
+			return precpred(_ctx, 3);
+		case 5:
+			return precpred(_ctx, 2);
+		}
+		return true;
+	}
+
 	public static final String _serializedATN =
-		"\u0004\u0001!\u00cb\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
-		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
-		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
-		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
-		"\f\u0007\f\u0002\r\u0007\r\u0001\u0000\u0005\u0000\u001e\b\u0000\n\u0000"+
-		"\f\u0000!\t\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0004\u0001\u001f\u00a8\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001"+
+		"\u0002\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004"+
+		"\u0002\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007"+
+		"\u0001\u0000\u0001\u0000\u0005\u0000\u0013\b\u0000\n\u0000\f\u0000\u0016"+
+		"\t\u0000\u0001\u0000\u0001\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
 		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
 		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
-		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0003"+
-		"\u00019\b\u0001\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0003"+
-		"\u0002?\b\u0002\u0001\u0002\u0001\u0002\u0001\u0003\u0001\u0003\u0001"+
-		"\u0003\u0001\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0005\u0001"+
-		"\u0005\u0001\u0005\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001"+
-		"\u0006\u0005\u0006R\b\u0006\n\u0006\f\u0006U\t\u0006\u0001\u0006\u0001"+
-		"\u0006\u0001\u0006\u0003\u0006Z\b\u0006\u0001\u0007\u0001\u0007\u0001"+
-		"\u0007\u0001\u0007\u0001\u0007\u0005\u0007a\b\u0007\n\u0007\f\u0007d\t"+
-		"\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0003\u0007i\b\u0007\u0001"+
-		"\b\u0001\b\u0001\b\u0001\b\u0001\b\u0005\bp\b\b\n\b\f\bs\t\b\u0001\b\u0001"+
-		"\b\u0001\b\u0003\bx\b\b\u0001\t\u0001\t\u0001\t\u0001\t\u0001\t\u0005"+
-		"\t\u007f\b\t\n\t\f\t\u0082\t\t\u0001\t\u0001\t\u0001\t\u0003\t\u0087\b"+
-		"\t\u0001\n\u0001\n\u0001\n\u0001\n\u0001\n\u0001\n\u0001\n\u0001\n\u0001"+
-		"\n\u0001\n\u0001\n\u0001\n\u0001\n\u0003\n\u0096\b\n\u0001\u000b\u0001"+
-		"\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001"+
-		"\u000b\u0005\u000b\u00a0\b\u000b\n\u000b\f\u000b\u00a3\t\u000b\u0001\u000b"+
-		"\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0005\u000b"+
-		"\u00ab\b\u000b\n\u000b\f\u000b\u00ae\t\u000b\u0001\u000b\u0003\u000b\u00b1"+
-		"\b\u000b\u0001\u000b\u0001\u000b\u0001\f\u0001\f\u0001\f\u0001\f\u0001"+
-		"\f\u0001\f\u0001\f\u0001\f\u0005\f\u00bd\b\f\n\f\f\f\u00c0\t\f\u0001\f"+
-		"\u0001\f\u0001\f\u0001\r\u0001\r\u0001\r\u0001\r\u0001\r\u0001\r\u0001"+
-		"\r\u0000\u0000\u000e\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014"+
-		"\u0016\u0018\u001a\u0000\u0005\u0001\u0000\u0007\t\u0001\u0000\u0015\u0016"+
-		"\u0001\u0000\u000f\u0014\u0001\u0000\n\u000b\u0001\u0000\f\r\u00d3\u0000"+
-		"\u001f\u0001\u0000\u0000\u0000\u00028\u0001\u0000\u0000\u0000\u0004:\u0001"+
-		"\u0000\u0000\u0000\u0006B\u0001\u0000\u0000\u0000\bG\u0001\u0000\u0000"+
-		"\u0000\nI\u0001\u0000\u0000\u0000\fY\u0001\u0000\u0000\u0000\u000eh\u0001"+
-		"\u0000\u0000\u0000\u0010w\u0001\u0000\u0000\u0000\u0012\u0086\u0001\u0000"+
-		"\u0000\u0000\u0014\u0095\u0001\u0000\u0000\u0000\u0016\u0097\u0001\u0000"+
-		"\u0000\u0000\u0018\u00b4\u0001\u0000\u0000\u0000\u001a\u00c4\u0001\u0000"+
-		"\u0000\u0000\u001c\u001e\u0003\u0002\u0001\u0000\u001d\u001c\u0001\u0000"+
-		"\u0000\u0000\u001e!\u0001\u0000\u0000\u0000\u001f\u001d\u0001\u0000\u0000"+
-		"\u0000\u001f \u0001\u0000\u0000\u0000 \u0001\u0001\u0000\u0000\u0000!"+
-		"\u001f\u0001\u0000\u0000\u0000\"#\u0003\u0004\u0002\u0000#$\u0005\u001b"+
-		"\u0000\u0000$%\u0006\u0001\uffff\uffff\u0000%9\u0001\u0000\u0000\u0000"+
-		"&\'\u0003\u0006\u0003\u0000\'(\u0005\u001b\u0000\u0000()\u0006\u0001\uffff"+
-		"\uffff\u0000)9\u0001\u0000\u0000\u0000*+\u0003\n\u0005\u0000+,\u0005\u001b"+
-		"\u0000\u0000,-\u0006\u0001\uffff\uffff\u0000-9\u0001\u0000\u0000\u0000"+
-		"./\u0003\u0016\u000b\u0000/0\u0006\u0001\uffff\uffff\u000009\u0001\u0000"+
-		"\u0000\u000012\u0003\u0018\f\u000023\u0006\u0001\uffff\uffff\u000039\u0001"+
-		"\u0000\u0000\u000045\u0003\u001a\r\u000056\u0005\u001b\u0000\u000067\u0006"+
-		"\u0001\uffff\uffff\u000079\u0001\u0000\u0000\u00008\"\u0001\u0000\u0000"+
-		"\u00008&\u0001\u0000\u0000\u00008*\u0001\u0000\u0000\u00008.\u0001\u0000"+
-		"\u0000\u000081\u0001\u0000\u0000\u000084\u0001\u0000\u0000\u00009\u0003"+
-		"\u0001\u0000\u0000\u0000:;\u0003\b\u0004\u0000;>\u0005\u001f\u0000\u0000"+
-		"<=\u0005\u000e\u0000\u0000=?\u0003\n\u0005\u0000><\u0001\u0000\u0000\u0000"+
-		">?\u0001\u0000\u0000\u0000?@\u0001\u0000\u0000\u0000@A\u0006\u0002\uffff"+
-		"\uffff\u0000A\u0005\u0001\u0000\u0000\u0000BC\u0005\u001f\u0000\u0000"+
-		"CD\u0005\u000e\u0000\u0000DE\u0003\n\u0005\u0000EF\u0006\u0003\uffff\uffff"+
-		"\u0000F\u0007\u0001\u0000\u0000\u0000GH\u0007\u0000\u0000\u0000H\t\u0001"+
-		"\u0000\u0000\u0000IJ\u0003\f\u0006\u0000JK\u0006\u0005\uffff\uffff\u0000"+
-		"K\u000b\u0001\u0000\u0000\u0000LS\u0003\u000e\u0007\u0000MN\u0007\u0001"+
-		"\u0000\u0000NO\u0003\u000e\u0007\u0000OP\u0006\u0006\uffff\uffff\u0000"+
-		"PR\u0001\u0000\u0000\u0000QM\u0001\u0000\u0000\u0000RU\u0001\u0000\u0000"+
-		"\u0000SQ\u0001\u0000\u0000\u0000ST\u0001\u0000\u0000\u0000TZ\u0001\u0000"+
-		"\u0000\u0000US\u0001\u0000\u0000\u0000VW\u0003\u000e\u0007\u0000WX\u0006"+
-		"\u0006\uffff\uffff\u0000XZ\u0001\u0000\u0000\u0000YL\u0001\u0000\u0000"+
-		"\u0000YV\u0001\u0000\u0000\u0000Z\r\u0001\u0000\u0000\u0000[b\u0003\u0010"+
-		"\b\u0000\\]\u0007\u0002\u0000\u0000]^\u0003\u0010\b\u0000^_\u0006\u0007"+
-		"\uffff\uffff\u0000_a\u0001\u0000\u0000\u0000`\\\u0001\u0000\u0000\u0000"+
-		"ad\u0001\u0000\u0000\u0000b`\u0001\u0000\u0000\u0000bc\u0001\u0000\u0000"+
-		"\u0000ci\u0001\u0000\u0000\u0000db\u0001\u0000\u0000\u0000ef\u0003\u0010"+
-		"\b\u0000fg\u0006\u0007\uffff\uffff\u0000gi\u0001\u0000\u0000\u0000h[\u0001"+
-		"\u0000\u0000\u0000he\u0001\u0000\u0000\u0000i\u000f\u0001\u0000\u0000"+
-		"\u0000jq\u0003\u0012\t\u0000kl\u0007\u0003\u0000\u0000lm\u0003\u0012\t"+
-		"\u0000mn\u0006\b\uffff\uffff\u0000np\u0001\u0000\u0000\u0000ok\u0001\u0000"+
-		"\u0000\u0000ps\u0001\u0000\u0000\u0000qo\u0001\u0000\u0000\u0000qr\u0001"+
-		"\u0000\u0000\u0000rx\u0001\u0000\u0000\u0000sq\u0001\u0000\u0000\u0000"+
-		"tu\u0003\u0012\t\u0000uv\u0006\b\uffff\uffff\u0000vx\u0001\u0000\u0000"+
-		"\u0000wj\u0001\u0000\u0000\u0000wt\u0001\u0000\u0000\u0000x\u0011\u0001"+
-		"\u0000\u0000\u0000y\u0080\u0003\u0014\n\u0000z{\u0007\u0004\u0000\u0000"+
-		"{|\u0003\u0014\n\u0000|}\u0006\t\uffff\uffff\u0000}\u007f\u0001\u0000"+
-		"\u0000\u0000~z\u0001\u0000\u0000\u0000\u007f\u0082\u0001\u0000\u0000\u0000"+
-		"\u0080~\u0001\u0000\u0000\u0000\u0080\u0081\u0001\u0000\u0000\u0000\u0081"+
-		"\u0087\u0001\u0000\u0000\u0000\u0082\u0080\u0001\u0000\u0000\u0000\u0083"+
-		"\u0084\u0003\u0014\n\u0000\u0084\u0085\u0006\t\uffff\uffff\u0000\u0085"+
-		"\u0087\u0001\u0000\u0000\u0000\u0086y\u0001\u0000\u0000\u0000\u0086\u0083"+
-		"\u0001\u0000\u0000\u0000\u0087\u0013\u0001\u0000\u0000\u0000\u0088\u0089"+
-		"\u0005\u0017\u0000\u0000\u0089\u008a\u0003\n\u0005\u0000\u008a\u008b\u0005"+
-		"\u0018\u0000\u0000\u008b\u008c\u0006\n\uffff\uffff\u0000\u008c\u0096\u0001"+
-		"\u0000\u0000\u0000\u008d\u008e\u0005\u001c\u0000\u0000\u008e\u0096\u0006"+
-		"\n\uffff\uffff\u0000\u008f\u0090\u0005\u001d\u0000\u0000\u0090\u0096\u0006"+
-		"\n\uffff\uffff\u0000\u0091\u0092\u0005\u001e\u0000\u0000\u0092\u0096\u0006"+
-		"\n\uffff\uffff\u0000\u0093\u0094\u0005\u001f\u0000\u0000\u0094\u0096\u0006"+
-		"\n\uffff\uffff\u0000\u0095\u0088\u0001\u0000\u0000\u0000\u0095\u008d\u0001"+
-		"\u0000\u0000\u0000\u0095\u008f\u0001\u0000\u0000\u0000\u0095\u0091\u0001"+
-		"\u0000\u0000\u0000\u0095\u0093\u0001\u0000\u0000\u0000\u0096\u0015\u0001"+
-		"\u0000\u0000\u0000\u0097\u0098\u0005\u0001\u0000\u0000\u0098\u0099\u0005"+
-		"\u0017\u0000\u0000\u0099\u009a\u0003\n\u0005\u0000\u009a\u009b\u0005\u0018"+
-		"\u0000\u0000\u009b\u00a1\u0005\u0019\u0000\u0000\u009c\u009d\u0003\u0002"+
-		"\u0001\u0000\u009d\u009e\u0006\u000b\uffff\uffff\u0000\u009e\u00a0\u0001"+
-		"\u0000\u0000\u0000\u009f\u009c\u0001\u0000\u0000\u0000\u00a0\u00a3\u0001"+
-		"\u0000\u0000\u0000\u00a1\u009f\u0001\u0000\u0000\u0000\u00a1\u00a2\u0001"+
-		"\u0000\u0000\u0000\u00a2\u00a4\u0001\u0000\u0000\u0000\u00a3\u00a1\u0001"+
-		"\u0000\u0000\u0000\u00a4\u00b0\u0005\u001a\u0000\u0000\u00a5\u00a6\u0005"+
-		"\u0002\u0000\u0000\u00a6\u00ac\u0005\u0019\u0000\u0000\u00a7\u00a8\u0003"+
-		"\u0002\u0001\u0000\u00a8\u00a9\u0006\u000b\uffff\uffff\u0000\u00a9\u00ab"+
-		"\u0001\u0000\u0000\u0000\u00aa\u00a7\u0001\u0000\u0000\u0000\u00ab\u00ae"+
-		"\u0001\u0000\u0000\u0000\u00ac\u00aa\u0001\u0000\u0000\u0000\u00ac\u00ad"+
-		"\u0001\u0000\u0000\u0000\u00ad\u00af\u0001\u0000\u0000\u0000\u00ae\u00ac"+
-		"\u0001\u0000\u0000\u0000\u00af\u00b1\u0005\u001a\u0000\u0000\u00b0\u00a5"+
-		"\u0001\u0000\u0000\u0000\u00b0\u00b1\u0001\u0000\u0000\u0000\u00b1\u00b2"+
-		"\u0001\u0000\u0000\u0000\u00b2\u00b3\u0006\u000b\uffff\uffff\u0000\u00b3"+
-		"\u0017\u0001\u0000\u0000\u0000\u00b4\u00b5\u0005\u0003\u0000\u0000\u00b5"+
-		"\u00b6\u0005\u0017\u0000\u0000\u00b6\u00b7\u0003\n\u0005\u0000\u00b7\u00b8"+
-		"\u0005\u0018\u0000\u0000\u00b8\u00be\u0005\u0019\u0000\u0000\u00b9\u00ba"+
-		"\u0003\u0002\u0001\u0000\u00ba\u00bb\u0006\f\uffff\uffff\u0000\u00bb\u00bd"+
-		"\u0001\u0000\u0000\u0000\u00bc\u00b9\u0001\u0000\u0000\u0000\u00bd\u00c0"+
-		"\u0001\u0000\u0000\u0000\u00be\u00bc\u0001\u0000\u0000\u0000\u00be\u00bf"+
-		"\u0001\u0000\u0000\u0000\u00bf\u00c1\u0001\u0000\u0000\u0000\u00c0\u00be"+
-		"\u0001\u0000\u0000\u0000\u00c1\u00c2\u0005\u001a\u0000\u0000\u00c2\u00c3"+
-		"\u0006\f\uffff\uffff\u0000\u00c3\u0019\u0001\u0000\u0000\u0000\u00c4\u00c5"+
-		"\u0005\u0004\u0000\u0000\u00c5\u00c6\u0005\u0017\u0000\u0000\u00c6\u00c7"+
-		"\u0003\n\u0005\u0000\u00c7\u00c8\u0005\u0018\u0000\u0000\u00c8\u00c9\u0006"+
-		"\r\uffff\uffff\u0000\u00c9\u001b\u0001\u0000\u0000\u0000\u0010\u001f8"+
-		">SYbhqw\u0080\u0086\u0095\u00a1\u00ac\u00b0\u00be";
+		"\u0001\u0001\u0001\u0001\u0001\u0003\u0001,\b\u0001\u0001\u0002\u0001"+
+		"\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0003\u0001\u0003\u0001"+
+		"\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0005"+
+		"\u0003;\b\u0003\n\u0003\f\u0003>\t\u0003\u0001\u0003\u0001\u0003\u0001"+
+		"\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0005\u0003F\b\u0003\n\u0003"+
+		"\f\u0003I\t\u0003\u0001\u0003\u0003\u0003L\b\u0003\u0001\u0003\u0001\u0003"+
+		"\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004"+
+		"\u0001\u0004\u0001\u0004\u0005\u0004X\b\u0004\n\u0004\f\u0004[\t\u0004"+
+		"\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0005\u0001\u0005\u0001\u0005"+
+		"\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0006\u0001\u0006\u0001\u0006"+
+		"\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0003\u0006"+
+		"n\b\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006"+
+		"\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006"+
+		"\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006"+
+		"\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006"+
+		"\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006"+
+		"\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006"+
+		"\u0001\u0006\u0005\u0006\u0094\b\u0006\n\u0006\f\u0006\u0097\t\u0006\u0001"+
+		"\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001"+
+		"\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001"+
+		"\u0007\u0003\u0007\u00a6\b\u0007\u0001\u0007\u0000\u0001\f\b\u0000\u0002"+
+		"\u0004\u0006\b\n\f\u000e\u0000\u0004\u0001\u0000\t\n\u0001\u0000\u0007"+
+		"\b\u0001\u0000\f\u000f\u0001\u0000\u0010\u0011\u00b3\u0000\u0010\u0001"+
+		"\u0000\u0000\u0000\u0002+\u0001\u0000\u0000\u0000\u0004-\u0001\u0000\u0000"+
+		"\u0000\u00062\u0001\u0000\u0000\u0000\bO\u0001\u0000\u0000\u0000\n_\u0001"+
+		"\u0000\u0000\u0000\fm\u0001\u0000\u0000\u0000\u000e\u00a5\u0001\u0000"+
+		"\u0000\u0000\u0010\u0014\u0005\u0005\u0000\u0000\u0011\u0013\u0003\u0002"+
+		"\u0001\u0000\u0012\u0011\u0001\u0000\u0000\u0000\u0013\u0016\u0001\u0000"+
+		"\u0000\u0000\u0014\u0012\u0001\u0000\u0000\u0000\u0014\u0015\u0001\u0000"+
+		"\u0000\u0000\u0015\u0017\u0001\u0000\u0000\u0000\u0016\u0014\u0001\u0000"+
+		"\u0000\u0000\u0017\u0018\u0005\u0006\u0000\u0000\u0018\u0001\u0001\u0000"+
+		"\u0000\u0000\u0019\u001a\u0003\u0004\u0002\u0000\u001a\u001b\u0005\u0019"+
+		"\u0000\u0000\u001b\u001c\u0006\u0001\uffff\uffff\u0000\u001c,\u0001\u0000"+
+		"\u0000\u0000\u001d\u001e\u0003\f\u0006\u0000\u001e\u001f\u0005\u0019\u0000"+
+		"\u0000\u001f \u0006\u0001\uffff\uffff\u0000 ,\u0001\u0000\u0000\u0000"+
+		"!\"\u0003\u0006\u0003\u0000\"#\u0006\u0001\uffff\uffff\u0000#,\u0001\u0000"+
+		"\u0000\u0000$%\u0003\b\u0004\u0000%&\u0006\u0001\uffff\uffff\u0000&,\u0001"+
+		"\u0000\u0000\u0000\'(\u0003\n\u0005\u0000()\u0005\u0019\u0000\u0000)*"+
+		"\u0006\u0001\uffff\uffff\u0000*,\u0001\u0000\u0000\u0000+\u0019\u0001"+
+		"\u0000\u0000\u0000+\u001d\u0001\u0000\u0000\u0000+!\u0001\u0000\u0000"+
+		"\u0000+$\u0001\u0000\u0000\u0000+\'\u0001\u0000\u0000\u0000,\u0003\u0001"+
+		"\u0000\u0000\u0000-.\u0005\u001d\u0000\u0000./\u0005\u000b\u0000\u0000"+
+		"/0\u0003\f\u0006\u000001\u0006\u0002\uffff\uffff\u00001\u0005\u0001\u0000"+
+		"\u0000\u000023\u0005\u0001\u0000\u000034\u0005\u0015\u0000\u000045\u0003"+
+		"\f\u0006\u000056\u0005\u0016\u0000\u00006<\u0005\u0017\u0000\u000078\u0003"+
+		"\u0002\u0001\u000089\u0006\u0003\uffff\uffff\u00009;\u0001\u0000\u0000"+
+		"\u0000:7\u0001\u0000\u0000\u0000;>\u0001\u0000\u0000\u0000<:\u0001\u0000"+
+		"\u0000\u0000<=\u0001\u0000\u0000\u0000=?\u0001\u0000\u0000\u0000><\u0001"+
+		"\u0000\u0000\u0000?K\u0005\u0018\u0000\u0000@A\u0005\u0002\u0000\u0000"+
+		"AG\u0005\u0017\u0000\u0000BC\u0003\u0002\u0001\u0000CD\u0006\u0003\uffff"+
+		"\uffff\u0000DF\u0001\u0000\u0000\u0000EB\u0001\u0000\u0000\u0000FI\u0001"+
+		"\u0000\u0000\u0000GE\u0001\u0000\u0000\u0000GH\u0001\u0000\u0000\u0000"+
+		"HJ\u0001\u0000\u0000\u0000IG\u0001\u0000\u0000\u0000JL\u0005\u0018\u0000"+
+		"\u0000K@\u0001\u0000\u0000\u0000KL\u0001\u0000\u0000\u0000LM\u0001\u0000"+
+		"\u0000\u0000MN\u0006\u0003\uffff\uffff\u0000N\u0007\u0001\u0000\u0000"+
+		"\u0000OP\u0005\u0003\u0000\u0000PQ\u0005\u0015\u0000\u0000QR\u0003\f\u0006"+
+		"\u0000RS\u0005\u0016\u0000\u0000SY\u0005\u0017\u0000\u0000TU\u0003\u0002"+
+		"\u0001\u0000UV\u0006\u0004\uffff\uffff\u0000VX\u0001\u0000\u0000\u0000"+
+		"WT\u0001\u0000\u0000\u0000X[\u0001\u0000\u0000\u0000YW\u0001\u0000\u0000"+
+		"\u0000YZ\u0001\u0000\u0000\u0000Z\\\u0001\u0000\u0000\u0000[Y\u0001\u0000"+
+		"\u0000\u0000\\]\u0005\u0018\u0000\u0000]^\u0006\u0004\uffff\uffff\u0000"+
+		"^\t\u0001\u0000\u0000\u0000_`\u0005\u0004\u0000\u0000`a\u0005\u0015\u0000"+
+		"\u0000ab\u0003\f\u0006\u0000bc\u0005\u0016\u0000\u0000cd\u0006\u0005\uffff"+
+		"\uffff\u0000d\u000b\u0001\u0000\u0000\u0000ef\u0006\u0006\uffff\uffff"+
+		"\u0000fg\u0005\u0014\u0000\u0000gh\u0003\f\u0006\bhi\u0006\u0006\uffff"+
+		"\uffff\u0000in\u0001\u0000\u0000\u0000jk\u0003\u000e\u0007\u0000kl\u0006"+
+		"\u0006\uffff\uffff\u0000ln\u0001\u0000\u0000\u0000me\u0001\u0000\u0000"+
+		"\u0000mj\u0001\u0000\u0000\u0000n\u0095\u0001\u0000\u0000\u0000op\n\u0007"+
+		"\u0000\u0000pq\u0006\u0006\uffff\uffff\u0000qr\u0005\u0012\u0000\u0000"+
+		"rs\u0003\f\u0006\bst\u0006\u0006\uffff\uffff\u0000t\u0094\u0001\u0000"+
+		"\u0000\u0000uv\n\u0006\u0000\u0000vw\u0006\u0006\uffff\uffff\u0000wx\u0005"+
+		"\u0013\u0000\u0000xy\u0003\f\u0006\u0007yz\u0006\u0006\uffff\uffff\u0000"+
+		"z\u0094\u0001\u0000\u0000\u0000{|\n\u0005\u0000\u0000|}\u0006\u0006\uffff"+
+		"\uffff\u0000}~\u0007\u0000\u0000\u0000~\u007f\u0003\f\u0006\u0006\u007f"+
+		"\u0080\u0006\u0006\uffff\uffff\u0000\u0080\u0094\u0001\u0000\u0000\u0000"+
+		"\u0081\u0082\n\u0004\u0000\u0000\u0082\u0083\u0006\u0006\uffff\uffff\u0000"+
+		"\u0083\u0084\u0007\u0001\u0000\u0000\u0084\u0085\u0003\f\u0006\u0005\u0085"+
+		"\u0086\u0006\u0006\uffff\uffff\u0000\u0086\u0094\u0001\u0000\u0000\u0000"+
+		"\u0087\u0088\n\u0003\u0000\u0000\u0088\u0089\u0006\u0006\uffff\uffff\u0000"+
+		"\u0089\u008a\u0007\u0002\u0000\u0000\u008a\u008b\u0003\f\u0006\u0004\u008b"+
+		"\u008c\u0006\u0006\uffff\uffff\u0000\u008c\u0094\u0001\u0000\u0000\u0000"+
+		"\u008d\u008e\n\u0002\u0000\u0000\u008e\u008f\u0006\u0006\uffff\uffff\u0000"+
+		"\u008f\u0090\u0007\u0003\u0000\u0000\u0090\u0091\u0003\f\u0006\u0003\u0091"+
+		"\u0092\u0006\u0006\uffff\uffff\u0000\u0092\u0094\u0001\u0000\u0000\u0000"+
+		"\u0093o\u0001\u0000\u0000\u0000\u0093u\u0001\u0000\u0000\u0000\u0093{"+
+		"\u0001\u0000\u0000\u0000\u0093\u0081\u0001\u0000\u0000\u0000\u0093\u0087"+
+		"\u0001\u0000\u0000\u0000\u0093\u008d\u0001\u0000\u0000\u0000\u0094\u0097"+
+		"\u0001\u0000\u0000\u0000\u0095\u0093\u0001\u0000\u0000\u0000\u0095\u0096"+
+		"\u0001\u0000\u0000\u0000\u0096\r\u0001\u0000\u0000\u0000\u0097\u0095\u0001"+
+		"\u0000\u0000\u0000\u0098\u0099\u0005\u0015\u0000\u0000\u0099\u009a\u0003"+
+		"\f\u0006\u0000\u009a\u009b\u0006\u0007\uffff\uffff\u0000\u009b\u009c\u0005"+
+		"\u0016\u0000\u0000\u009c\u00a6\u0001\u0000\u0000\u0000\u009d\u009e\u0005"+
+		"\u001c\u0000\u0000\u009e\u00a6\u0006\u0007\uffff\uffff\u0000\u009f\u00a0"+
+		"\u0005\u001a\u0000\u0000\u00a0\u00a6\u0006\u0007\uffff\uffff\u0000\u00a1"+
+		"\u00a2\u0005\u001d\u0000\u0000\u00a2\u00a6\u0006\u0007\uffff\uffff\u0000"+
+		"\u00a3\u00a4\u0005\u001b\u0000\u0000\u00a4\u00a6\u0006\u0007\uffff\uffff"+
+		"\u0000\u00a5\u0098\u0001\u0000\u0000\u0000\u00a5\u009d\u0001\u0000\u0000"+
+		"\u0000\u00a5\u009f\u0001\u0000\u0000\u0000\u00a5\u00a1\u0001\u0000\u0000"+
+		"\u0000\u00a5\u00a3\u0001\u0000\u0000\u0000\u00a6\u000f\u0001\u0000\u0000"+
+		"\u0000\n\u0014+<GKYm\u0093\u0095\u00a5";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
