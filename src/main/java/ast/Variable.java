@@ -1,8 +1,9 @@
 package ast;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class Variable extends  ASTNode{
+public class Variable implements ASTNode{
     private String name;
 
     public Variable(String name) {
@@ -10,16 +11,13 @@ public class Variable extends  ASTNode{
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
-    public Object accept(ASTVisitor visitor) {
-        return visitor.visitVariable(this);
+    public Object execute(HashMap<String, Object> Table) {
+        Object o = Table.get(name);
+        if(o instanceof Constant)
+            return ((Constant) Table.get(name)).execute(Table);
+        else if (o == null)
+            return 0;
+        return o;
     }
 }

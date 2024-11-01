@@ -14,23 +14,8 @@ grammar Rusticode;
  * Parser Rules
  */
 
-program returns [ASTNode node]
-    @init {
-        List<ASTNode> body = new ArrayList<>(); // Lista de instrucciones
-    }
-    : (sentence{
-        if ($sentence.node != null) {
-            body.add($sentence.node);
-        } else {
-            System.err.println("Error: sentence es null");
-        }
-    })+
-    {
-        $node = new Program(body); // Crear el nodo Program
-
-    }
-    EOF
-;
+program
+    : sentence* ;
 
 sentence returns [ASTNode node]
     : varDeclaration SEMICOLON { $node = $varDeclaration.node; }
@@ -92,9 +77,9 @@ term returns [ASTNode node]
 
 factor returns [ASTNode node]
     : LPAREN expr=expression RPAREN { $node = $expr.node; }
-    | NUMBER { $node = new NumberLiteral($NUMBER.text); }
-    | STRING_LITERAL { $node = new StringLiteral($STRING_LITERAL.text); }
-    | BOOL_LITERAL { $node = new BooleanLiteral($BOOL_LITERAL.text); }
+    | NUMBER { $node = new Constant($NUMBER.text); }
+    | STRING_LITERAL { $node = new Constant($STRING_LITERAL.text); }
+    | BOOL_LITERAL { $node = new Constant($BOOL_LITERAL.text); }
     | ID { $node = new Variable($ID.text); }
     ;
 
@@ -123,8 +108,8 @@ whileStmt returns [ASTNode node]
     ;
 
 printStmt returns [ASTNode node]
-    : PRINT LPAREN expression RPAREN
-      { $node = new Print($expression.node); }
+    : PRINT LPAREN expr=expression RPAREN
+      { $node = new Print($expr.node); }
     ;
 
 /**

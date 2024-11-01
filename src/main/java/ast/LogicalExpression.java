@@ -1,44 +1,33 @@
 package ast;
 
-import java.util.Map;
+import java.util.HashMap;
 
-public class LogicalExpression extends ASTNode{
-    private String operator;
-    private ASTNode left;
-    private ASTNode right;
+public class LogicalExpression implements ASTNode{
 
-    public LogicalExpression(String operator, ASTNode left, ASTNode right) {
-        this.operator = operator;
-        this.left = left;
-        this.right = right;
+    private ASTNode op1;
+    private ASTNode op2;
+    public String op;
+
+    public LogicalExpression(String op, ASTNode op1, ASTNode op2) {
+        super();
+        this.op1 = op1;
+        this.op2 = op2;
+        this.op = op;
     }
 
-    public ASTNode getLeft() {
-        return left;
-    }
-
-    public void setLeft(ASTNode left) {
-        this.left = left;
-    }
-
-    public String getOperator() {
-        return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
-    }
-
-    public ASTNode getRight() {
-        return right;
-    }
-
-    public void setRight(ASTNode right) {
-        this.right = right;
-    }
 
     @Override
-    public Object accept(ASTVisitor visitor) {
-        return visitor.visitLogicalExpression(this);
+    public Object execute(HashMap<String, Object> Table) {
+
+        if (op2 == null)
+            return !(Boolean) op1.execute(Table);
+
+        switch (op) {
+            case "&&":
+                return (Boolean) op1.execute(Table) && (Boolean) op2.execute(Table);
+            case "||":
+                return (Boolean) op1.execute(Table) || (Boolean) op2.execute(Table);
+        }
+        return null;
     }
 }

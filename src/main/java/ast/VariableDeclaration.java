@@ -1,8 +1,8 @@
 package ast;
 
-import java.util.Map;
+import java.util.HashMap;
 
-public class VariableDeclaration extends ASTNode {
+public class VariableDeclaration implements ASTNode {
     private String type;
     private String id;
     private ASTNode expression;
@@ -13,35 +13,19 @@ public class VariableDeclaration extends ASTNode {
         this.expression = expression;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public ASTNode getExpression() {
-        return expression;
-    }
-
-    public void setExpression(ASTNode expression) {
-        this.expression = expression;
-    }
 
     @Override
-    public Object accept(ASTVisitor visitor) {
-        return visitor.visitVariableDeclaration(this);
+    public Object execute(HashMap<String, Object> Table) {
+        Object value = null;
+
+        // Si hay una expresión, se evalúa
+        if (expression != null) {
+            value = expression.execute(Table);
+        }
+
+        // Se guarda la variable en la tabla de símbolos
+        Table.put(id, value);
+
+        return null;
     }
-
-
-
 }

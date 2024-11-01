@@ -1,9 +1,8 @@
 package ast;
 
-import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 
-public class Assignment extends ASTNode {
+public class Assignment implements ASTNode {
     private String id;
     private ASTNode expression;
 
@@ -12,24 +11,10 @@ public class Assignment extends ASTNode {
         this.expression = expression;
     }
 
-    public ASTNode getExpression() {
-        return expression;
-    }
-
-    public void setExpression(ASTNode expression) {
-        this.expression = expression;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     @Override
-    public Object accept(ASTVisitor visitor) {
-        return visitor.visitAssignment(this);
+    public Object execute(HashMap<String, Object> Table) {
+        Table.put(id, expression.execute(Table));
+        return null;
     }
 }

@@ -2,46 +2,36 @@ package ast;
 
 
 import java.util.HashMap;
-import java.util.Map;
 
-public class ComparativeExpression extends ASTNode {
+public class ComparativeExpression implements ASTNode {
 
     private String operator;
-    private ASTNode left;
-    private ASTNode right;
+    private ASTNode op1;
+    private ASTNode op2;
 
     public ComparativeExpression(String operator, ASTNode left, ASTNode right) {
         this.operator = operator;
-        this.left = left;
-        this.right = right;
+        this.op1 = left;
+        this.op2 = right;
     }
 
-    public ASTNode getLeft() {
-        return left;
-    }
-
-    public void setLeft(ASTNode left) {
-        this.left = left;
-    }
-
-    public String getOperator() {
-        return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
-    }
-
-    public ASTNode getRight() {
-        return right;
-    }
-
-    public void setRight(ASTNode right) {
-        this.right = right;
-    }
 
     @Override
-    public Object accept(ASTVisitor visitor) {
-        return visitor.visitComparativeExpression(this);
+    public Object execute(HashMap<String, Object> Table) {
+        switch (operator) {
+            case "==":
+                return (op1.execute(Table)).equals(op2.execute(Table));
+            case "!=":
+                return !(op1.execute(Table)).equals(op2.execute(Table));
+            case ">":
+                return (Double) op1.execute(Table) > (Double) op2.execute(Table);
+            case "<":
+                return (Double) op1.execute(Table) < (Double) op2.execute(Table);
+            case ">=":
+                return (Double) op1.execute(Table) >= (Double) op2.execute(Table);
+            case "<=":
+                return (Double) op1.execute(Table) <= (Double) op2.execute(Table);
+        }
+        return null;
     }
 }

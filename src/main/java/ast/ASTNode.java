@@ -1,12 +1,13 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 
-public abstract class ASTNode {
-    public abstract Object accept(ASTVisitor visitor);
+public interface ASTNode {
+    public Object execute(HashMap<String, Object> Table);
 
 }

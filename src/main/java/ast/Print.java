@@ -1,26 +1,20 @@
 package ast;
 
-import java.util.List;
-import java.util.Map;
+import ui.RusticodeGUI;
+import java.util.HashMap;
 
-public class Print extends ASTNode{
+public class Print implements ASTNode {
     private ASTNode data;
 
     public Print(ASTNode data) {
-        super();
-        this.data = data;
-    }
-
-    public ASTNode getData() {
-        return data;
-    }
-
-    public void setData(ASTNode data) {
         this.data = data;
     }
 
     @Override
-    public Object accept(ASTVisitor visitor) {
-        return visitor.visitPrint(this);
+    public Object execute(HashMap<String, Object> Table) {
+        String msg = String.valueOf(data.execute(Table));
+        msg = msg.replaceAll("\"", "");
+        RusticodeGUI.getInstance().appendOutput(msg + "\n");
+        return null;
     }
 }

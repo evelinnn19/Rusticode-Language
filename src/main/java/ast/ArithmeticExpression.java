@@ -1,45 +1,36 @@
 package ast;
 
-import java.util.Map;
+import java.util.HashMap;
 
-public class ArithmeticExpression extends ASTNode {
+public class ArithmeticExpression implements ASTNode {
+
     private String operator;
-    private ASTNode left;
-    private ASTNode right;
+    private ASTNode op1;
+    private ASTNode op2;
 
     public ArithmeticExpression(String operator, ASTNode left, ASTNode right) {
+        super();
         this.operator = operator;
-        this.left = left;
-        this.right = right;
+        this.op1 = left;
+        this.op2 = right;
     }
 
-    public ASTNode getLeft() {
-        return left;
-    }
 
-    public void setLeft(ASTNode left) {
-        this.left = left;
-    }
 
-    public String getOperator() {
-        return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
-    }
-
-    public ASTNode getRight() {
-        return right;
-    }
-
-    public void setRight(ASTNode right) {
-        this.right = right;
-    }
 
     @Override
-    public Object accept(ASTVisitor visitor) {
-        return visitor.visitArithmeticExpression(this);
+    public Object execute(HashMap<String, Object> Table) {
+        switch(operator) {
+            case "+":
+                return (Double) op1.execute(Table) + (Double) op2.execute(Table);
+            case "-":
+                return (Double) op1.execute(Table) - (Double) op2.execute(Table);
+            case "*":
+                return (Double) op1.execute(Table) * (Double) op2.execute(Table);
+            case "/":
+                return (Double) op1.execute(Table) / (Double) op2.execute(Table);
+        }
+        return null;
     }
 }
 

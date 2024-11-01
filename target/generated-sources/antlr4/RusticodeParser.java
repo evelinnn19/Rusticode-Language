@@ -1,5 +1,4 @@
-// Generated from C:/Users/Evelin Suarez/OneDrive/Desktop/Estudio/repoR/src/main/antlr4/Rusticode.g4 by ANTLR 4.13.1
-package language;
+// Generated from Rusticode.g4 by ANTLR 4.13.2
 
     import java.util.HashMap;
     import java.util.ArrayList;
@@ -14,9 +13,9 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue", "this-escape"})
 public class RusticodeParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.13.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.13.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -133,11 +132,6 @@ public class RusticodeParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitProgram(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitProgram(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ProgramContext program() throws RecognitionException {
@@ -213,11 +207,6 @@ public class RusticodeParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitSentence(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitSentence(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -323,11 +312,6 @@ public class RusticodeParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitVarDeclaration(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitVarDeclaration(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final VarDeclarationContext varDeclaration() throws RecognitionException {
@@ -393,11 +377,6 @@ public class RusticodeParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitAssignmentStmt(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitAssignmentStmt(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final AssignmentStmtContext assignmentStmt() throws RecognitionException {
@@ -442,11 +421,6 @@ public class RusticodeParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitType(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitType(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -498,11 +472,6 @@ public class RusticodeParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitExpression(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -560,11 +529,6 @@ public class RusticodeParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitLogicalExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitLogicalExpr(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -679,11 +643,6 @@ public class RusticodeParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitComparisonExpr(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitComparisonExpr(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ComparisonExprContext comparisonExpr() throws RecognitionException {
@@ -780,11 +739,6 @@ public class RusticodeParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitArithmeticExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitArithmeticExpr(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -883,11 +837,6 @@ public class RusticodeParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitTerm(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitTerm(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final TermContext term() throws RecognitionException {
@@ -980,11 +929,6 @@ public class RusticodeParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitFactor(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitFactor(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1092,11 +1036,6 @@ public class RusticodeParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitIfStmt(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitIfStmt(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1212,11 +1151,6 @@ public class RusticodeParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitWhileStmt(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitWhileStmt(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final WhileStmtContext whileStmt() throws RecognitionException {
@@ -1291,11 +1225,6 @@ public class RusticodeParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof RusticodeListener ) ((RusticodeListener)listener).exitPrintStmt(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RusticodeVisitor ) return ((RusticodeVisitor<? extends T>)visitor).visitPrintStmt(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
