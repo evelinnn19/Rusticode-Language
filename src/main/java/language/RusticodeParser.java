@@ -1117,4 +1117,15 @@ public class RusticodeParser extends Parser {
 			_decisionToDFA[i] = new DFA(_ATN.getDecisionState(i), i);
 		}
 	}
+	@Override
+	public void notifyErrorListeners(Token offendingToken, String msg, RecognitionException e) {
+		String errorMessage = "Error de sintaxis en la línea " + offendingToken.getLine() + ": " + msg;
+		System.err.println(errorMessage);
+
+		try {
+			throw new Exception(errorMessage);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 }

@@ -1,17 +1,24 @@
 package ui;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
+
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import language.*;
 
@@ -23,6 +30,7 @@ public class GUIRusticode extends JFrame {
     private JButton runButton;
     private mxGraphComponent graphComponent;
     private JSplitPane outputSplitPane;
+    private HashMap<String, Object> tabla;
 
     private GUIRusticode() {
         initComponents();
@@ -39,6 +47,7 @@ public class GUIRusticode extends JFrame {
     }
 
     private void initComponents() {
+
         // Panel principal con BorderLayout
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -62,9 +71,7 @@ public class GUIRusticode extends JFrame {
         graphComponent = new mxGraphComponent(graph);
 
         // Crear JSplitPane vertical para salida y árbol
-        outputSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-                outScrollPane,
-                graphComponent);
+        outputSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, outScrollPane, graphComponent);
         outputSplitPane.setResizeWeight(0.5);
 
         JLabel outputLabel = new JLabel("Salida y Árbol de Análisis");
@@ -72,9 +79,7 @@ public class GUIRusticode extends JFrame {
         rightPanel.add(outputSplitPane, BorderLayout.CENTER);
 
         // Panel principal dividido
-        JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                leftPanel,
-                rightPanel);
+        JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         mainSplitPane.setResizeWeight(0.5);
 
         // Panel para el botón
@@ -93,6 +98,48 @@ public class GUIRusticode extends JFrame {
         setSize(1000, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        setIconImage(tk.getImage("src/media/icon.png"));
+
+        // Inicializar tamaño de fuente
+        Font font = inTextArea.getFont();
+        final int[] fontSize = {font.getSize()};
+
+        // Acción para aumentar tamaño de fuente
+        Action increaseFontAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fontSize[0] += 2;
+                Font newFont = font.deriveFont((float) fontSize[0]);
+                inTextArea.setFont(newFont);
+                outTextArea.setFont(newFont);
+            }
+        };
+
+        // Acción para reducir tamaño de fuente
+        Action decreaseFontAction = new AbstractAction() {
+            @Override
+            public boolean accept(Object sender) {
+                return super.accept(sender);
+            }
+
+            public void actionPerformed(ActionEvent e) {
+                if (fontSize[0] > 6) { // Limitar tamaño mínimo
+                    fontSize[0] -= 2;
+                    Font newFont = font.deriveFont((float) fontSize[0]);
+                    inTextArea.setFont(newFont);
+                    outTextArea.setFont(newFont);
+                }
+            }
+        };
+
+        // Asignar acciones a teclas Ctrl + "+" y Ctrl + "-"
+        inTextArea.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control PLUS"), "increaseFont");
+        inTextArea.getActionMap().put("increaseFont", increaseFontAction);
+
+        inTextArea.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control MINUS"), "decreaseFont");
+        inTextArea.getActionMap().put("decreaseFont", decreaseFontAction);
+
     }
 
     private void actualizarArbol(RusticodeParser.ProgramContext parseTree) {
@@ -116,6 +163,7 @@ public class GUIRusticode extends JFrame {
             mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
             layout.setInterRankCellSpacing(50);
             layout.execute(parent);
+
         } finally {
             graph.getModel().endUpdate();
         }
@@ -140,13 +188,11 @@ public class GUIRusticode extends JFrame {
         graph.getStylesheet().putCellStyle("declaracion", estiloDeclaracion);
     }
 
-    private void crearArbol(ParseTree nodo, Object vertexPadre, mxGraph graph,
-                            Object parent, Map<ParseTree, Object> vertexMap) {
+    private void crearArbol(ParseTree nodo, Object vertexPadre, mxGraph graph, Object parent, Map<ParseTree, Object> vertexMap) {
         String tipo = obtenerTipoNodo(nodo);
         String estilo = determinarEstilo(tipo);
 
-        Object vertex = graph.insertVertex(parent, null, tipo,
-                0, 0, 100, 40, estilo);
+        Object vertex = graph.insertVertex(parent, null, tipo, 0, 0, 100, 40, estilo);
         vertexMap.put(nodo, vertex);
 
         if (vertexPadre != null) {
@@ -170,30 +216,43 @@ public class GUIRusticode extends JFrame {
     }
 
     private void runButtonActionPerformed() {
-        outTextArea.setText("");
-        CharStream codePointCharStream = CharStreams.fromString(inTextArea.getText());
 
-        Logger logger = Logger.getLogger(GUIRusticode.class.getName());
-        logger.setLevel(Level.ALL);
+        try {
+            outTextArea.setText("");
 
-        RusticodeLexer lexer = new RusticodeLexer(codePointCharStream);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        RusticodeParser parser = new RusticodeParser(tokens);
+            outTextArea.setForeground(Color.BLACK);
 
-        HashMap<String, Object> tabla = new HashMap<>();
-        RusticodeParser.ProgramContext tree = parser.program();
+            CharStream codePointCharStream = CharStreams.fromString(inTextArea.getText());
 
-        // Actualizar el árbol visual
-        actualizarArbol(tree);
+            Logger logger = Logger.getLogger(GUIRusticode.class.getName());
+            logger.setLevel(Level.ALL);
 
-        RusticodeCustomVisitor visitor = new RusticodeCustomVisitor();
-        visitor.visit(tree);
+            RusticodeLexer lexer = new RusticodeLexer(codePointCharStream);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            RusticodeParser parser = new RusticodeParser(tokens);
 
-        tree.sentence().forEach(statement -> statement.node.execute(tabla));
+            HashMap<String, Object> tabla = new HashMap<>();
+            RusticodeParser.ProgramContext tree = parser.program();
+
+            // Actualizar el árbol visual
+            actualizarArbol(tree);
+
+            RusticodeCustomVisitor visitor = new RusticodeCustomVisitor();
+            visitor.visit(tree);
+
+            tree.sentence().forEach(statement -> statement.node.execute(tabla));
+
+            outTextArea.append("Ejecucion finalizada");
+
+        } catch (Exception e) {
+            outTextArea.append(e.getMessage());
+        }
+
     }
 
+
     private void setupFonts() {
-        Font font = new Font("Consolas", Font.PLAIN, 11);
+        Font font = new Font("Consolas", Font.PLAIN, 16);
         outTextArea.setFont(font);
         inTextArea.setFont(font);
     }
