@@ -10,7 +10,6 @@ grammar Rusticode;
     private HashMap<String, Object> symbolTable = new HashMap<>();
 }
 
-
 /********************************************************************************************************/
 /**
  *                                     Parser Rules
@@ -21,7 +20,7 @@ program
     : START sentence* END;
 
 sentence returns [ASTNode node]
-    :assignmentStmt SEMICOLON { $node = $assignmentStmt.node; }
+    : assignmentStmt SEMICOLON { $node = $assignmentStmt.node; }
     | expression SEMICOLON { $node = $expression.node; }
     | ifStmt { $node = $ifStmt.node; }
     | whileStmt { $node = $whileStmt.node; }
@@ -50,6 +49,7 @@ ifStmt returns [ASTNode node]
     ;
 
 
+
 whileStmt returns [ASTNode node]
 @init {
     ArrayList<ASTNode> whileBody = new ArrayList<>();
@@ -67,49 +67,39 @@ printStmt returns [ASTNode node]
     ;
 
 
-/**
-* Define expresiones aritmeticas, comparativas y booleanas.
-* Tambien tiene un info, en donde una expression puede abarcar un numero, booleano, id, string.
-*/
-
 expression returns [ASTNode node]
     : op = NOT expression {
         $node = new LogicalExpression($op.text, $expression.node, null);
     }
     | e1 = expression {$node = $e1.node;} op = AND e2 = expression {
-                $node = new LogicalExpression($op.text, $node, $e2.node);
-            }
+        $node = new LogicalExpression($op.text, $node, $e2.node);
+    }
     | e1 = expression {$node = $e1.node;} op = OR e2 = expression {
-                $node = new LogicalExpression($op.text, $node, $e2.node);
-           }
-    | e1 = expression {$node = $e1.node;}  op = ( MULT | DIV ) e2 = expression {
-            $node = new ArithmeticExpression($op.text, $node, $e2.node);
-        }
+        $node = new LogicalExpression($op.text, $node, $e2.node);
+    }
+    | e1 = expression {$node = $e1.node;}  op = ( MULT | DIV | MOD ) e2 = expression {
+        $node = new ArithmeticExpression($op.text, $node, $e2.node);
+    }
     | e1 = expression {$node = $e1.node;}  op = ( SUM | RES ) e2 = expression {
-            $node = new ArithmeticExpression($op.text, $node, $e2.node);
-        }
+        $node = new ArithmeticExpression($op.text, $node, $e2.node);
+    }
     | e1 = expression {$node = $e1.node;}  op = ( GT | LT | GTE | LTE ) e2 = expression {
-            $node = new ComparativeExpression($op.text, $node, $e2.node);
-        }
+        $node = new ComparativeExpression($op.text, $node, $e2.node);
+    }
     | e1 = expression {$node = $e1.node;}  op = ( EQ | NEQ ) e2 = expression {
-            $node = new ComparativeExpression($op.text, $node, $e2.node);
-        }
+        $node = new ComparativeExpression($op.text, $node, $e2.node);
+    }
     | info {$node = $info.node; }
-        ;
+    ;
 
-/**
-* Define constantes y variables. Tambien precedencia de parentesis en expression y anidamiento.
-*/
+
 info returns [ASTNode node]
      : LPAREN expression {$node = $expression.node; } RPAREN
-        | BOOL  { $node = new Constant(Boolean.parseBoolean($BOOL.text)); }
-        | NUMBER { $node = new Constant(Double.parseDouble($NUMBER.text)); }
-        | ID     { $node = new Variable(String.valueOf($ID.text)); }
-        | STRING { $node = new Constant(String.format("\"%s\"", $STRING.text)); }
-        ;
-
-
-
+     | BOOL  { $node = new Constant(Boolean.parseBoolean($BOOL.text)); }
+     | NUMBER { $node = new Constant(Double.parseDouble($NUMBER.text)); }
+     | ID     { $node = new Variable(String.valueOf($ID.text)); }
+     | STRING { $node = new Constant(String.format("\"%s\"", $STRING.text)); }
+     ;
 
 /********************************************************************************************************/
 /**
@@ -125,13 +115,13 @@ PRINT   : 'print';
 START   : 'start:';
 END     : 'end';
 
-
 // Operators
 SUM    : '+';
 RES    : '-';
 MULT   : '*';
 DIV    : '/';
 ASSIGN : '=';
+MOD    : '%';  // Operación de módulo
 
 // Comparison Operators
 GT      : '>';
