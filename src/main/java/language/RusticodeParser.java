@@ -1,4 +1,4 @@
-// Generated from C:/Users/Evelin Suarez/OneDrive/Desktop/Estudio/repoR/src/main/antlr4/Rusticode.g4 by ANTLR 4.13.1
+// Generated from C:/Users/carlos/IdeaProjects/rusticode-language-syncro/src/main/antlr4/Rusticode.g4 by ANTLR 4.13.2
 package language;
 
     import java.util.HashMap;
@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue", "this-escape"})
 public class RusticodeParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.13.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.13.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -1117,6 +1117,7 @@ public class RusticodeParser extends Parser {
 			_decisionToDFA[i] = new DFA(_ATN.getDecisionState(i), i);
 		}
 	}
+
 	@Override
 	public void notifyErrorListeners(Token offendingToken, String msg, RecognitionException e) {
 		String errorMessage = "Error de sintaxis en la línea " + offendingToken.getLine() + ": " + msg;

@@ -1,42 +1,38 @@
 package ui;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.*;
-
-import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.view.mxGraph;
-import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-
-import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import language.RusticodeCustomVisitor;
+import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
-import language.*;
+import language.RusticodeLexer;
+import language.RusticodeParser;
 
+import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import java.awt.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GUIRusticode extends JFrame {
     private static GUIRusticode instance;
     private JTextArea inTextArea;
-    private JTextArea outTextArea;
+    private JTextPane outTextArea;
     private JButton runButton;
-    private mxGraphComponent graphComponent;
+    private JPanel treePanel;
     private JSplitPane outputSplitPane;
     private HashMap<String, Object> tabla;
+    private TreeViewer treeViewer;
+    private JSlider treeScaleSlider;
 
     private GUIRusticode() {
         initComponents();
         setupFonts();
         inTextArea.setLineWrap(true);
-        outTextArea.setLineWrap(true);
+        outTextArea.setEditable(false);
     }
 
     public static GUIRusticode getInstance() {
@@ -47,7 +43,6 @@ public class GUIRusticode extends JFrame {
     }
 
     private void initComponents() {
-
         // Panel principal con BorderLayout
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -61,19 +56,25 @@ public class GUIRusticode extends JFrame {
         leftPanel.add(sourceScrollPane, BorderLayout.CENTER);
         inTextArea.append("start:\n\t\nend");
 
-
         // Panel derecho dividido para salida y árbol
         JPanel rightPanel = new JPanel(new BorderLayout(5, 5));
-        outTextArea = new JTextArea(10, 25);
-        outTextArea.setEnabled(false);
+        outTextArea = new JTextPane();
         JScrollPane outScrollPane = new JScrollPane(outTextArea);
 
-        // Inicializar el componente del grafo
-        mxGraph graph = new mxGraph();
-        graphComponent = new mxGraphComponent(graph);
+        // Inicializar el panel del árbol y slider de escala
+        treePanel = new JPanel(new BorderLayout());
+        treeScaleSlider = new JSlider(1, 300, 150); // Escala entre 1x y 3x
+        treeScaleSlider.addChangeListener(e -> {
+            if (treeViewer != null) {
+                treeViewer.setScale(treeScaleSlider.getValue() / 100.0); // Ajustar escala
+                treePanel.revalidate();
+                treePanel.repaint();
+            }
+        });
+
 
         // Crear JSplitPane vertical para salida y árbol
-        outputSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, outScrollPane, graphComponent);
+        outputSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, outScrollPane, treePanel);
         outputSplitPane.setResizeWeight(0.5);
 
         JLabel outputLabel = new JLabel("Salida y Árbol de Análisis");
@@ -84,11 +85,13 @@ public class GUIRusticode extends JFrame {
         JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         mainSplitPane.setResizeWeight(0.5);
 
-        // Panel para el botón
+        // Panel para el botón y slider de escala
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         runButton = new JButton("Ejecutar");
         runButton.addActionListener(evt -> runButtonActionPerformed());
         buttonPanel.add(runButton);
+        buttonPanel.add(new JLabel("Escala del árbol:"));
+        buttonPanel.add(treeScaleSlider);
 
         // Agregar todo al panel principal
         mainPanel.add(mainSplitPane, BorderLayout.CENTER);
@@ -102,128 +105,28 @@ public class GUIRusticode extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         Toolkit tk = Toolkit.getDefaultToolkit();
         setIconImage(tk.getImage("src/media/icon.png"));
-
-        // Inicializar tamaño de fuente
-        Font font = inTextArea.getFont();
-        final int[] fontSize = {font.getSize()};
-
-        // Acción para aumentar tamaño de fuente
-        Action increaseFontAction = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fontSize[0] += 2;
-                Font newFont = font.deriveFont((float) fontSize[0]);
-                inTextArea.setFont(newFont);
-                outTextArea.setFont(newFont);
-            }
-        };
-
-        // Acción para reducir tamaño de fuente
-        Action decreaseFontAction = new AbstractAction() {
-            @Override
-            public boolean accept(Object sender) {
-                return super.accept(sender);
-            }
-
-            public void actionPerformed(ActionEvent e) {
-                if (fontSize[0] > 6) { // Limitar tamaño mínimo
-                    fontSize[0] -= 2;
-                    Font newFont = font.deriveFont((float) fontSize[0]);
-                    inTextArea.setFont(newFont);
-                    outTextArea.setFont(newFont);
-                }
-            }
-        };
-
-        // Asignar acciones a teclas Ctrl + "+" y Ctrl + "-"
-        inTextArea.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control PLUS"), "increaseFont");
-        inTextArea.getActionMap().put("increaseFont", increaseFontAction);
-
-        inTextArea.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control MINUS"), "decreaseFont");
-        inTextArea.getActionMap().put("decreaseFont", decreaseFontAction);
-
     }
 
-    private void actualizarArbol(RusticodeParser.ProgramContext parseTree) {
-        mxGraph graph = graphComponent.getGraph();
-        Object parent = graph.getDefaultParent();
+    private void actualizarArbol(RusticodeParser.ProgramContext parseTree, RusticodeParser parser) {
+        treePanel.removeAll(); // Limpiar el árbol anterior
 
-        // Limpiar el grafo anterior
-        graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
+        // Crear TreeViewer con las reglas del parser y el árbol generado
+        treeViewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), parseTree);
+        treeViewer.setScale(treeScaleSlider.getValue() / 100.0); // Ajustar escala según el slider
 
-        // Configurar estilos
-        configurarEstilosGrafo(graph);
-
-        // Crear el nuevo árbol
-        Map<ParseTree, Object> vertexMap = new HashMap<>();
-
-        graph.getModel().beginUpdate();
-        try {
-            crearArbol(parseTree, null, graph, parent, vertexMap);
-
-            // Aplicar layout
-            mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
-            layout.setInterRankCellSpacing(50);
-            layout.execute(parent);
-
-        } finally {
-            graph.getModel().endUpdate();
-        }
-    }
-
-    private void configurarEstilosGrafo(mxGraph graph) {
-        Map<String, Object> estilos = graph.getStylesheet().getDefaultVertexStyle();
-        estilos.put("shape", "rectangle");
-        estilos.put("rounded", true);
-        estilos.put("strokeColor", "#666666");
-        estilos.put("fillColor", "#FFFFFF");
-        estilos.put("fontSize", 12);
-        estilos.put("fontFamily", "Arial");
-
-        // Estilos específicos para diferentes tipos de nodos
-        Map<String, Object> estiloPrograma = new HashMap<>(estilos);
-        estiloPrograma.put("fillColor", "#E1F5FE");
-        graph.getStylesheet().putCellStyle("programa", estiloPrograma);
-
-        Map<String, Object> estiloDeclaracion = new HashMap<>(estilos);
-        estiloDeclaracion.put("fillColor", "#E8F5E9");
-        graph.getStylesheet().putCellStyle("declaracion", estiloDeclaracion);
-    }
-
-    private void crearArbol(ParseTree nodo, Object vertexPadre, mxGraph graph, Object parent, Map<ParseTree, Object> vertexMap) {
-        String tipo = obtenerTipoNodo(nodo);
-        String estilo = determinarEstilo(tipo);
-
-        Object vertex = graph.insertVertex(parent, null, tipo, 0, 0, 100, 40, estilo);
-        vertexMap.put(nodo, vertex);
-
-        if (vertexPadre != null) {
-            graph.insertEdge(parent, null, "", vertexPadre, vertex);
-        }
-
-        for (int i = 0; i < nodo.getChildCount(); i++) {
-            crearArbol(nodo.getChild(i), vertex, graph, parent, vertexMap);
-        }
-    }
-
-    private String obtenerTipoNodo(ParseTree nodo) {
-        String nombreClase = nodo.getClass().getSimpleName();
-        return nombreClase.replace("Context", "");
-    }
-
-    private String determinarEstilo(String tipo) {
-        if (tipo.contains("Program")) return "programa";
-        if (tipo.contains("Declaration")) return "declaracion";
-        return "defaultVertex";
+        // Agregar TreeViewer al panel del árbol
+        treePanel.add(treeViewer, BorderLayout.CENTER);
+        treePanel.revalidate();
+        treePanel.repaint();
     }
 
     private void runButtonActionPerformed() {
+        outTextArea.setText("");  // Limpiar área de salida
 
         try {
-            outTextArea.setText("");
+            appendToOutput("Iniciando ejecución...", Color.BLACK);
 
-            outTextArea.setForeground(Color.BLACK);
-
+            // Crear flujo de caracteres de entrada desde el panel de texto
             CharStream codePointCharStream = CharStreams.fromString(inTextArea.getText());
 
             Logger logger = Logger.getLogger(GUIRusticode.class.getName());
@@ -233,25 +136,25 @@ public class GUIRusticode extends JFrame {
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             RusticodeParser parser = new RusticodeParser(tokens);
 
-            HashMap<String, Object> tabla = new HashMap<>();
+            tabla = new HashMap<>();
             RusticodeParser.ProgramContext tree = parser.program();
 
             // Actualizar el árbol visual
-            actualizarArbol(tree);
+            actualizarArbol(tree, parser);
 
+            // Crear un visitante personalizado y visitar el árbol
             RusticodeCustomVisitor visitor = new RusticodeCustomVisitor();
             visitor.visit(tree);
 
             tree.sentence().forEach(statement -> statement.node.execute(tabla));
 
-            outTextArea.append("Ejecucion finalizada");
+            // Confirmación de finalización de la ejecución
+            appendToOutput("Ejecución finalizada correctamente", new Color(0, 128, 0));
 
         } catch (Exception e) {
-            outTextArea.append(e.getMessage());
+            appendToOutput("Error: " + e.getMessage(), Color.RED);
         }
-
     }
-
 
     private void setupFonts() {
         Font font = new Font("Consolas", Font.PLAIN, 16);
@@ -259,8 +162,21 @@ public class GUIRusticode extends JFrame {
         inTextArea.setFont(font);
     }
 
-    public void appendOutput(Object obj) {
-        outTextArea.append(obj.toString());
+    public void appendOutput(String output) {
+        appendToOutput(output, Color.BLACK); // Agrega el texto en negro por defecto
+    }
+
+    private void appendToOutput(String message, Color color) {
+        // Agregar texto con color específico al JTextPane
+        outTextArea.setEditable(true);
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        javax.swing.text.AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, color);
+
+        int len = outTextArea.getDocument().getLength();
+        outTextArea.setCaretPosition(len);
+        outTextArea.setCharacterAttributes(aset, false);
+        outTextArea.replaceSelection(message + "\n");
+        outTextArea.setEditable(false);
     }
 
     public static void main(String[] args) {

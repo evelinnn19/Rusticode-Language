@@ -16,9 +16,9 @@ public class Print implements ASTNode {
 
     @Override
     public Object execute(HashMap<String, Object> Table) {
-        String msg = String.valueOf(data.execute(Table));
-        msg = msg.replaceAll("\"", "");
-       GUIRusticode.getInstance().appendOutput(msg + "\n");
-        return null;
+            String msg = String.valueOf(data.execute(Table));
+            msg = msg.replaceAll("\"", "");
+            GUIRusticode.getInstance().appendOutput(msg);
+            return null;
     }
 }
