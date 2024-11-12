@@ -59,6 +59,8 @@ public class GUIRusticode extends JFrame {
         JScrollPane sourceScrollPane = new JScrollPane(inTextArea);
         leftPanel.add(sourceLabel, BorderLayout.NORTH);
         leftPanel.add(sourceScrollPane, BorderLayout.CENTER);
+        inTextArea.append("start:\n\t\nend");
+
 
         // Panel derecho dividido para salida y árbol
         JPanel rightPanel = new JPanel(new BorderLayout(5, 5));
